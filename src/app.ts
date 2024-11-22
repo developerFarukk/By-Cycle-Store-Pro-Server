@@ -6,7 +6,7 @@ import express, { Request, Response } from 'express'
 const app = express()
 
 // middleware
-app.use(express.json())
+// app.use(express.json())
 
 // app.use('/api/user', userRouter)
 // app.use('/api/tour', tourRouter)
