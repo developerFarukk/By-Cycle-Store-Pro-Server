@@ -2,20 +2,23 @@
 
 
 import { model, Schema } from 'mongoose';
-// import { BikID } from './bik.interface';
+import { IOrder } from './order.interface';
 
-const orderSchema = new Schema({
+const orderSchema = new Schema<IOrder>({
 
     email: {
         type: String,
-        required: [true, 'Email is required'],
+        required: [true, 'Please provide your email'],
+        unique: true,
         validate: {
-            validator: function (v) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validates email format
+            validator: function (value: string) {
+                return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value)
             },
-            message: props => `${props.value} is not a valid email!`,
+            message: '{VALUE} is not a valid email',
         },
+        immutable: true,
     },
+
     product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Bike', // Refers to the Bike model
@@ -31,10 +34,11 @@ const orderSchema = new Schema({
         required: [true, 'Total price is required'],
         min: [0, 'Total price must be a positive number'], // Ensures the total price is positive
     },
-
-    timestamps: true,
-}
+},
+    {
+        timestamps: true,
+    }
 )
 
-const Order = model('order', orderSchema)
+const Order = model<IOrder>('order', orderSchema)
 export default Order;
