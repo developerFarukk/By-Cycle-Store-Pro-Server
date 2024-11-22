@@ -4,7 +4,7 @@
 import { model, Schema } from 'mongoose';
 // import { BikID } from './bik.interface';
 
-const bikSchema = new Schema({
+const orderSchema = new Schema({
 
     email: {
         type: String,
@@ -36,5 +36,5 @@ const bikSchema = new Schema({
 }
 )
 
-const Bike = model('bik', bikSchema)
-export default Bike;
+const Order = model('order', orderSchema)
+export default Order;
