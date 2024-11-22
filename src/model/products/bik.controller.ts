@@ -10,7 +10,7 @@ const createBike = async (req: Request, res: Response) => {
 
         res.json({
             success: true,
-            message: 'User created successfully',
+            message: 'Bicycle created successfully',
             data: result,
         })
     } catch (error) {
