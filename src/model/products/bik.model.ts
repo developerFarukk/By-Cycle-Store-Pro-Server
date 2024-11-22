@@ -3,11 +3,6 @@ import { model, Schema } from 'mongoose';
 import { BikID } from './bik.interface';
 
 const bikSchema = new Schema<BikID>({
-    bikeID: {
-        type: Number,
-        required: [true, 'Bike ID is required'],
-        unique: true,
-    },
     name: {
         type: String,
         required: [true, 'Bike Name is required'],

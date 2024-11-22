@@ -1,6 +1,5 @@
 
 export interface BikID {
-    bikeID: number; 
     name: string; 
     brand: string; 
     price: number; 
