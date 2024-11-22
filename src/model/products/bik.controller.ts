@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
-import Bike from "./bik.model"
+import { bikService } from "./bik.service"
 
 const createBike = async (req: Request, res: Response) => {
     try {
         const payload = req.body
 
-        // const result = await userService.createBike(payload)
-        const result = await Bike.create(payload)
+        const result = await bikService.createBik(payload)
+        // const result = await Bike.create(payload)
 
         res.json({
             success: true,

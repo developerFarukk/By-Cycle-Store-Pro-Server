@@ -1,7 +1,8 @@
 
 import { model, Schema } from 'mongoose';
+import { BikID } from './bik.interface';
 
-const bikSchema = new Schema({
+const bikSchema = new Schema<BikID>({
     bikeID: {
         type: Number,
         required: [true, 'Bike ID is required'],
@@ -9,7 +10,7 @@ const bikSchema = new Schema({
     },
     name: {
         type: String,
-        required:  [true, 'Bike Name is required'],
+        required: [true, 'Bike Name is required'],
     },
     brand: {
         type: String,
@@ -22,8 +23,12 @@ const bikSchema = new Schema({
     },
     type: {
         type: String,
-        required: true,
-        enum: ['Road', 'Mountain', 'Hybrid', 'Electric'],
+
+        required: [true, ' Inpute Bike Type is Road, Mountain, Hybrid, Electric'],
+        enum: {
+            values: ['Road', 'Mountain', 'Hybrid', 'Electric'],
+            message: `{VALUE} is not valid,  please inpute valid value`
+        },
     },
     description: {
         type: String,
@@ -41,7 +46,8 @@ const bikSchema = new Schema({
 },
     {
         timestamps: true,
-    })
+    }
+)
 
-const Bike = model('bik', bikSchema)
+const Bike = model<BikID>('bik', bikSchema)
 export default Bike;
