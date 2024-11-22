@@ -87,6 +87,26 @@ const updateBik = async (req: Request, res: Response) => {
     }
 }
 
+// Delete Bycikle Functionality
+const deleteBik = async (req: Request, res: Response) => {
+    try {
+        const bikId = req.params.bikId
+        await bikService.deleteBik(bikId)
+
+        res.send({
+            status: true,
+            message: 'Bicycle deleted successfully',
+            data: {},
+        })
+    } catch (error) {
+        res.json({
+            status: false,
+            message: 'Something went wrong',
+            error,
+        })
+    }
+}
+
 
 
 
@@ -94,6 +114,6 @@ export const bikeController = {
     createBike,
     getAllBike,
     getSinglBik,
-    updateBik
-
+    updateBik,
+    deleteBik
 }

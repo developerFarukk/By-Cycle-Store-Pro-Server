@@ -28,10 +28,17 @@ const updateBik = async (id: string, data: BikID) => {
     return result
 }
 
+// Delete method
+const deleteBik = async (id: string) => {
+    const result = await Bike.findByIdAndDelete(id)
+    return result
+}
+
 
 export const bikService = {
     createBik,
     getAllBik,
     getSinglBik,
-    updateBik
+    updateBik,
+    deleteBik
 }
