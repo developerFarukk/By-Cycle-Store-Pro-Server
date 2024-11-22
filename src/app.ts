@@ -1,14 +1,15 @@
 
 import express, { Request, Response } from 'express'
-// import userRouter from './module/user/user.router'
-// import tourRouter from './module/tour/tour.route'
+import bikRouter from './model/products/bik.router'
+
 
 const app = express()
 
 // middleware
-// app.use(express.json())
+app.use(express.json())
 
-// app.use('/api/user', userRouter)
+app.use('/api/bik', bikRouter)
+
 // app.use('/api/tour', tourRouter)
 
 // POST: /api/user/create-user
