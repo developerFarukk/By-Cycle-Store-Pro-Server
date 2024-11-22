@@ -4,19 +4,20 @@ import { model, Schema } from 'mongoose';
 const bikSchema = new Schema({
     bikeID: {
         type: Number,
-        required: true
+        required: [true, 'Bike ID is required'],
+        unique: true,
     },
     name: {
         type: String,
-        required: true,
+        required:  [true, 'Bike Name is required'],
     },
     brand: {
         type: String,
-        required: true,
+        required: [true, 'Bike brand is required']
     },
     price: {
         type: Number,
-        required: true,
+        required: [true, 'Bike brand is required'],
         min: 0,
     },
     type: {
@@ -26,11 +27,11 @@ const bikSchema = new Schema({
     },
     description: {
         type: String,
-        required: true,
+        required: [true, 'Bike description is required']
     },
     quantity: {
         type: Number,
-        required: true,
+        required: [true, 'Bike description is required'],
         min: 0,
     },
     inStock: {
