@@ -13,8 +13,14 @@ const getAllBik = async () => {
     return result
 }
 
+const getSinglBik = async (id: string) => {
+    const result = await Bike.findById(id)
+    return result
+}
+
 
 export const bikService = {
     createBik,
-    getAllBik
+    getAllBik,
+    getSinglBik
 }

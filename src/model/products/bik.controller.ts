@@ -43,10 +43,34 @@ const getAllBike = async (req: Request, res: Response) => {
     }
 }
 
+// Get a Specific Bicycle Function
+const getSinglBik = async (req: Request, res: Response) => {
+    try {
+    //   console.log(req.params)
+      const bikId = req.params.bikId
+  
+      const result = await bikService.getSinglBik(bikId)
+  
+      res.send({
+        status: true,
+        message: 'Bicycle retrieved successfully',
+        result,
+      })
+    } catch (error) {
+      res.json({
+        status: false,
+        message: 'Something went wrong',
+        error,
+      })
+    }
+  }
+
+
 
 
 export const bikeController = {
     createBike,
-    getAllBike
+    getAllBike,
+    getSinglBik
 
 }
