@@ -8,9 +8,9 @@ const bikRouter = Router()
 bikRouter.post('/create-bik', bikeController.createBike)
 bikRouter.get('/', bikeController.getAllBike)
 bikRouter.get('/:bikId', bikeController.getSinglBik)
+bikRouter.put('/:bikId', bikeController.updateBik)
 
 
-// bikRouter.put('/:bikId', bikController.updatebik)
 // bikRouter.delete('/:bikId', bikController.deletebik)
 
 

@@ -8,7 +8,7 @@ const app = express()
 // middleware
 app.use(express.json())
 
-app.use('/api/bik', bikRouter)
+app.use('/api/products', bikRouter)
 
 // app.use('/api/tour', tourRouter)
 
