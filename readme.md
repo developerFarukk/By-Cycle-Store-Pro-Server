@@ -1,0 +1,39 @@
+
+# 🚴 Bicycle Store API
+
+## Objective
+A robust **Express** application built with **TypeScript** and **MongoDB (Mongoose)** to manage a Bicycle Store. The API enables CRUD operations on products (bicycles), manages customer orders, and ensures data integrity using schema validation.
+
+---
+
+## Features ✨
+- **Bicycle Management**: Add, retrieve, update, and delete bicycles with detailed attributes like brand, type, price, stock status, etc.
+- **Order Management**: Place orders with inventory management logic to handle stock updates and validations.
+- **Revenue Calculation**: Aggregates total revenue from all orders placed in the store.
+- **Robust Validation**: Includes comprehensive data validation and error handling for all endpoints.
+- **Search Functionality**: Query bicycles based on name, brand, or type.
+- **Real-Time Stock Updates**: Automatically adjusts stock levels upon successful orders.
+
+---
+
+## Tech Stack 🛠️
+- **Backend**: Node.js, Express.js, TypeScript
+- **Database**: MongoDB (via Mongoose)
+- **Validation**: Zod
+- **Error Handling**: Centralized error handler with clear, structured responses
+- **Tools**: ESLint, Prettier, Nodemon, TypeScript Compiler
+
+---
+
+## Project Setup ⚙️
+
+### Prerequisites
+1. **Node.js** (v16 or later)
+2. **MongoDB** (locally or a cloud-based service like MongoDB Atlas)
+3. **Package Manager**: npm or yarn
+
+### Installation Steps
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/developerFarukk/Bi-Cycle-Store.git
+   cd bicycle-store-api
