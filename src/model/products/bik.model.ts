@@ -41,6 +41,7 @@ const bikSchema = new Schema<BikID>({
 },
     {
         timestamps: true,
+        versionKey: false
     }
 )
 

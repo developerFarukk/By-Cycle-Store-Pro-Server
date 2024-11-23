@@ -1,5 +1,5 @@
 
-import { model, Schema } from 'mongoose';
+import { model, Schema, version } from 'mongoose';
 import { OrderDocument } from './order.interface';
 
 const orderSchema = new Schema<OrderDocument>({
@@ -35,7 +35,9 @@ const orderSchema = new Schema<OrderDocument>({
 },
     {
         timestamps: true,
+        versionKey: false
     }
+    
 )
 
 const Order = model<OrderDocument>('order', orderSchema)
