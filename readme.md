@@ -27,6 +27,40 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ---
 
+## Project API Root
+
+### Bicycle APIs
+- **Create Bicycle API**  
+  - **Endpoint**: `/api/products`  
+  - **Method**: `POST`  
+
+- **Get All Bicycles API**  
+  - **Endpoint**: `/api/products`  
+  - **Method**: `GET`  
+
+- **Get Single Bicycle API**  
+  - **Endpoint**: `/api/products/:productId`  
+  - **Method**: `GET`  
+
+- **Update Bicycle API**  
+  - **Endpoint**: `/api/products/:productId`  
+  - **Method**: `PUT`  
+
+- **Delete Bicycle API**  
+  - **Endpoint**: `/api/products/:productId`  
+  - **Method**: `DELETE`  
+
+### Order APIs
+- **Order a Bicycle API**  
+  - **Endpoint**: `/api/orders`  
+  - **Method**: `POST`  
+
+- **Calculate Revenue from Orders API**  
+  - **Endpoint**: `/api/orders/revenue`  
+  - **Method**: `GET`  
+
+---
+
 ## Project Setup ⚙️
 
 ### Prerequisites
