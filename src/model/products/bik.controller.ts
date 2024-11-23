@@ -27,19 +27,20 @@ const createBike = async (req: Request, res: Response) => {
 const getAllBike = async (req: Request, res: Response) => {
     try {
 
-        const result = await bikService.getAllBik()
+        const { searchTerm } = req.query;
+
+        const result = await bikService.getAllBikQuery(searchTerm as string);
 
         res.json({
             success: true,
             message: 'Bicycles retrieved successfully',
             data: result,
         })
-    } catch (error) {
-        res.json({
+    } catch (error: unknown) {
+        res.status(404).json({
             success: false,
-            message: 'Validation failed',
-            error,
-        })
+            message: error instanceof Error ? error.message : "An error occurred",
+        });
     }
 }
 

@@ -1,18 +1,34 @@
+import { } from "mongoose"
 import { BikID } from "./bik.interface"
 import Bike from "./bik.model"
 
-// Creat function
+// Creat products function
 const createBik = async (payload: BikID): Promise<BikID> => {
     const result = await Bike.create(payload)
 
     return result
 }
 
-// Get All Data function
-const getAllBik = async () => {
-    const result = await Bike.find()
-    return result
-}
+// Get all products and query
+const getAllBikQuery = async (searchTerm?: string) => {
+    const query: any = {};
+
+    if (searchTerm) {
+        query.$or = [
+            { name: { $regex: searchTerm, $options: "i" } },
+            { brand: { $regex: searchTerm, $options: "i" } },
+            { type: { $regex: searchTerm, $options: "i" } },
+        ];
+    }
+
+    const result = await Bike.find(query);
+
+    if (result.length === 0) {
+        throw new Error("No bicycles found matching the search criteria.");
+    }
+
+    return result;
+};
 
 // get Single Data Function
 const getSinglBik = async (id: string) => {
@@ -37,7 +53,7 @@ const deleteBik = async (id: string) => {
 
 export const bikService = {
     createBik,
-    getAllBik,
+    getAllBikQuery,
     getSinglBik,
     updateBik,
     deleteBik
