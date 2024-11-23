@@ -1,10 +1,14 @@
 import mongoose from "mongoose";
 import Bike from "../products/bik.model";
-import { CreateOrder } from "./order.interface";
 import Order from "./order.model";
+import {  createOrderValid } from "./order.interface";
 
 // Bycykle Order Created functionality
-const orderBik = async ({ email, product, quantity, totalPrice }: CreateOrder) => {
+const orderBik = async (data: unknown) => {
+
+    // Validate input using Zod
+    const { email, product, quantity, totalPrice } = createOrderValid.parse(data);
+
     // Convert product ID to ObjectId
     const productId = new mongoose.Types.ObjectId(product);
 
@@ -60,8 +64,8 @@ const orderBik = async ({ email, product, quantity, totalPrice }: CreateOrder) =
     }
 
     const updatedOrder = await Order.findByIdAndUpdate(
-        order._id, 
-        { status: "Completed", updatedAt: new Date() }, 
+        order._id,
+        { status: "Completed", updatedAt: new Date() },
         { new: true }
     );
 

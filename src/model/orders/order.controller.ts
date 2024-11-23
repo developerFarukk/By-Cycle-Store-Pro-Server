@@ -6,7 +6,7 @@ import { CreateOrder } from "./order.interface";
 // Bycykle Order Created Functionality
 const orderBik = async (req: Request, res: Response): Promise<Response> => {
     try {
-        const { email, product, quantity, totalPrice } = req.body as CreateOrder;
+        const { email, product, quantity, totalPrice } = req.body as CreateOrder ;
 
         if (!email || !product || !quantity || !totalPrice) {
             return res.status(400).json({
