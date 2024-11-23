@@ -31,19 +31,19 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ### Bicycle APIs
 - **Create Bicycle API**  
-  - **Endpoint**: `/api/products/create-bik`  
+  - **Endpoint**: `/api/products`  
   - **Method**: `POST` 
-  - **Example Inpute Data**: 
+  - **Request Body**: 
     ```json
-        {
-    "name": "Roadster 5000",
-    "brand": "SpeedX",
-    "price": 300,
-    "type": "Road",
-    "description": "A premium road bike designed for speed and performance.",
-    "quantity": 20,
-    "inStock": true
-}
+    {
+        "name": "Roadster 5000",
+        "brand": "SpeedX",
+        "price": 300,
+        "type": "Road",
+        "description": "A premium road bike designed for speed and performance.",
+        "quantity": 20,
+        "inStock": true
+    }
 
 
 - **Get All Bicycles API**  
@@ -56,7 +56,13 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 - **Update Bicycle API**  
   - **Endpoint**: `/api/products/:productId`  
-  - **Method**: `PUT`  
+  - **Method**: `PUT` 
+  - **Request Body**: 
+    ```json
+    { 
+        "price": 350,
+        "quantity": 15
+    } 
 
 - **Delete Bicycle API**  
   - **Endpoint**: `/api/products/:productId`  
@@ -65,7 +71,15 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 ### Order APIs
 - **Order a Bicycle API**  
   - **Endpoint**: `/api/orders`  
-  - **Method**: `POST`  
+  - **Method**: `POST`
+  - **Request Body**: 
+    ```json
+    {
+        "email": "customerr@example.com",
+        "product": "648a45e5f0123c45678d9012",
+        "quantity": 2,
+        "totalPrice": 600
+    }   
 
 - **Calculate Revenue from Orders API**  
   - **Endpoint**: `/api/orders/revenue`  

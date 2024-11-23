@@ -5,7 +5,7 @@ import { bikeController } from './bik.controller'
 
 const bikRouter = Router()
 
-bikRouter.post('/create-bik', bikeController.createBike)
+bikRouter.post('/', bikeController.createBike)
 bikRouter.get('/', bikeController.getAllBike)
 bikRouter.get('/:bikId', bikeController.getSinglBik)
 bikRouter.put('/:bikId', bikeController.updateBik)
