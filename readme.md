@@ -37,3 +37,17 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
    ```bash
    git clone https://github.com/developerFarukk/Bi-Cycle-Store.git
    cd bicycle-store-api
+
+2. **Install Dependencies**  
+   ```bash
+   npm install
+
+3. **Environment Setup**  
+    Create a *.env* file in the root directory with the following keys:
+   ```bash
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+
+4. **Start the Development Server**  
+   ```bash
+   npm run dev
