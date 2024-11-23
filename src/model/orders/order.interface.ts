@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface CreateOrder {
+ 
     email: string;
     product: string;
     quantity: number;
@@ -8,8 +9,10 @@ export interface CreateOrder {
 }
 
 export interface OrderDocument extends Document {
+    status: boolean
     email: string;
     product: mongoose.Types.ObjectId;
     quantity: number;
     totalPrice: number;
+   
 }

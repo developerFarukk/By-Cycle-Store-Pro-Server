@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 import Bike from "../products/bik.model";
-import { CreateOrder } from "./order.interface"
+import { CreateOrder } from "./order.interface";
 import Order from "./order.model";
 
-
-// Bycykle Order Created funtionality
+// Bycykle Order Created functionality
 const orderBik = async ({ email, product, quantity, totalPrice }: CreateOrder) => {
-
+    // Convert product ID to ObjectId
     const productId = new mongoose.Types.ObjectId(product);
+
+    // Check if the product exists in the database
     const productData = await Bike.aggregate([
         { $match: { _id: productId } },
         {
@@ -19,21 +20,24 @@ const orderBik = async ({ email, product, quantity, totalPrice }: CreateOrder) =
         },
     ]);
 
+    // If product is not found, throw an error
     if (!productData.length) {
         throw new Error("Product not found");
     }
 
     const [productInfo] = productData;
 
+    // Check if there's sufficient stock
     if (productInfo.quantity < quantity) {
         throw new Error("Insufficient stock available");
     }
 
+    // Update product inventory
     const updatedProduct = await Bike.findOneAndUpdate(
-        { _id: product, quantity: { $gte: quantity } },
+        { _id: productId, quantity: { $gte: quantity } }, // Correctly pass the product ID as ObjectId
         {
-            $inc: { quantity: -quantity },
-            $set: { inStock: productInfo.quantity - quantity > 0 },
+            $inc: { quantity: -quantity }, // Decrease the quantity
+            $set: { inStock: productInfo.quantity - quantity > 0 }, // Update inStock flag
         },
         { new: true }
     );
@@ -42,16 +46,32 @@ const orderBik = async ({ email, product, quantity, totalPrice }: CreateOrder) =
         throw new Error("Failed to update product inventory");
     }
 
+    // Create a new order
     const order = await Order.create({
         email,
-        product,
+        product: productId,
         quantity,
         totalPrice,
     });
 
-    return order;
+    // Ensure the order was created successfully
+    if (!order) {
+        throw new Error("Failed to create order");
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+        order._id, 
+        { status: "Completed", updatedAt: new Date() }, 
+        { new: true }
+    );
+
+    if (!updatedOrder) {
+        throw new Error("Failed to update order after creation");
+    }
+
+    return updatedOrder;
 }
 
 export const orderService = {
     orderBik,
-}
+};
