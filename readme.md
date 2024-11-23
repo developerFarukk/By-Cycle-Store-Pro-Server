@@ -31,8 +31,20 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ### Bicycle APIs
 - **Create Bicycle API**  
-  - **Endpoint**: `/api/products`  
-  - **Method**: `POST`  
+  - **Endpoint**: `/api/products/create-bik`  
+  - **Method**: `POST` 
+  - **Example Inpute Data**: 
+    ```bash
+        {
+  "name": "Roadster 5000",
+  "brand": "SpeedX",
+  "price": 300,
+  "type": "Road",
+  "description": "A premium road bike designed for speed and performance.",
+  "quantity": 20,
+  "inStock": true
+}
+
 
 - **Get All Bicycles API**  
   - **Endpoint**: `/api/products`  
