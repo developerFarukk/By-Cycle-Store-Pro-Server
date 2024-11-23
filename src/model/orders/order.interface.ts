@@ -1,9 +1,15 @@
+import mongoose from "mongoose";
 
-export interface IOrder {
+export interface CreateOrder {
     email: string;
     product: string;
     quantity: number;
     totalPrice: number;
-    createdAt: string;
-    updatedAt: string;
+}
+
+export interface OrderDocument extends Document {
+    email: string;
+    product: mongoose.Types.ObjectId;
+    quantity: number;
+    totalPrice: number;
 }

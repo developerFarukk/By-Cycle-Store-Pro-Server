@@ -1,10 +1,8 @@
 
-
-
 import { model, Schema } from 'mongoose';
-import { IOrder } from './order.interface';
+import { OrderDocument } from './order.interface';
 
-const orderSchema = new Schema<IOrder>({
+const orderSchema = new Schema<OrderDocument>({
 
     email: {
         type: String,
@@ -20,19 +18,19 @@ const orderSchema = new Schema<IOrder>({
     },
 
     product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Bike', // Refers to the Bike model
-        required: [true, 'Product is required'],
+        type: Schema.Types.ObjectId,
+        ref: 'Product', 
+        required: [true, 'Product ID is required'],
     },
     quantity: {
         type: Number,
         required: [true, 'Quantity is required'],
-        min: [1, 'Quantity must be at least 1'], // Ensures a minimum quantity
+        min: [1, 'Quantity must be at least 1'], 
     },
     totalPrice: {
         type: Number,
         required: [true, 'Total price is required'],
-        min: [0, 'Total price must be a positive number'], // Ensures the total price is positive
+        min: [0, 'Total price must be a positive number'],
     },
 },
     {
@@ -40,5 +38,5 @@ const orderSchema = new Schema<IOrder>({
     }
 )
 
-const Order = model<IOrder>('order', orderSchema)
+const Order = model<OrderDocument>('order', orderSchema)
 export default Order;
