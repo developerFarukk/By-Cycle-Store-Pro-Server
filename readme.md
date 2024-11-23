@@ -20,7 +20,7 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ## Tech Stack 🛠️
 - **Backend**: Node.js, Express.js, TypeScript
-- **Database**: MongoDB (via Mongoose)
+- **Database**: MongoDB (via Mongoose).
 - **Validation**: Zod
 - **Error Handling**: Centralized error handler with clear, structured responses
 - **Tools**: ESLint, Prettier, Nodemon, TypeScript Compiler
