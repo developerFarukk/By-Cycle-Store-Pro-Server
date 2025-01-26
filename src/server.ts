@@ -1,25 +1,43 @@
 
+import { Server } from 'http';
 import mongoose from 'mongoose'
 import app from './app'
 import config from './config'
+// import seedSuperAdmin from './app/BD';
 
-async function server() {
+
+let server: Server;
+
+
+async function main() {
     try {
-        await mongoose.connect(config.database_url as string)
+        await mongoose.connect(config.database_url as string);
 
-        app.listen(config.port, () => {
-            console.log(`Server running on port ${config.port} 🏃🏽‍♂️‍➡️`)
-        })
-    } catch (error) {
-        console.error(error)
+        // seedSuperAdmin();
+
+        server = app.listen(config.port, () => {
+            console.log(`app is listening on port ${config.port}`);
+        });
+    } catch (err) {
+        console.log(err);
     }
 }
 
-// function server() {
-//     app.listen(config.port, () => {
-//         console.log("server is running");
-        
-//     })
-// }
+main();
 
-server()
+process.on('unhandledRejection', () => {
+    console.log(`😈 unahandledRejection is detected , shutting down ...`);
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    process.exit(1);
+});
+
+process.on('uncaughtException', () => {
+    console.log(`😈 uncaughtException is detected , shutting down ...`);
+    process.exit(1);
+});
+
+// Promise.reject();
