@@ -18,7 +18,7 @@ app.use('/api/orders', orderRouter)
 app.get('/', (req: Request, res: Response) => {
     res.send({
         status: true,
-        message: 'Server Live ⚡',
+        message: 'By cycle Server Live ⚡',
     })
 })
 
