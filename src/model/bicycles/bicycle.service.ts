@@ -1,5 +1,6 @@
 
 import QueryBuilder from "../../builder/QueryBuilder";
+import { BicycleSearchableFields } from "./bicycle.constant";
 import { TBicycle } from "./bicycle.interface";
 import { Bicycle } from "./bicycles.model";
 
@@ -12,19 +13,19 @@ const createBicycleIntoDB = async (payload: TBicycle) => {
 
 // All Bicycle data Get
 const getAllBicycleFromDB = async (query: Record<string, unknown>) => {
-    const courseQuery = new QueryBuilder(
-        Bicycle.find(),
-        // .populate('preRequisiteCourses.course'),
+    // console.log(query);
+    
+    const bicycleQuery = new QueryBuilder( Bicycle.find(),
         query,
     )
-        .search(CourseSearchableFields)
+        .search(BicycleSearchableFields)
         .filter()
         .sort()
         .paginate()
         .fields();
 
-    const meta = await courseQuery.countTotal();
-    const result = await courseQuery.modelQuery;
+    const meta = await bicycleQuery.countTotal();
+    const result = await bicycleQuery.modelQuery;
 
     return {
         meta,

@@ -6,3 +6,6 @@ export const BicycleBrand: TBicycleBrand[] = ['Duranta', 'Atlas', 'Hero', 'Phoen
 
 // Bycycle Type
 export const BicycleType: TBicycleType[] = ['Road', 'Mountain', 'Hybrid', 'Electric'];
+
+
+export const BicycleSearchableFields = ['name', 'brand', 'model', 'type', 'description',  ];

@@ -70,14 +70,14 @@ const bicycleSchema = new Schema<TBicycle>({
     }
 )
 
-bicycleSchema.pre('find', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-});
+// bicycleSchema.pre('find', function (next) {
+//     this.find({ isDeleted: { $ne: true } });
+//     next();
+// });
 
-bicycleSchema.pre('findOne', function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-});
+// bicycleSchema.pre('findOne', function (next) {
+//     this.find({ isDeleted: { $ne: true } });
+//     next();
+// });
 
-export const Bicycle = model<TBicycle, BicycleModel>('bicycle', bicycleSchema);
+export const Bicycle = model<TBicycle, BicycleModel>('Bicycle', bicycleSchema);

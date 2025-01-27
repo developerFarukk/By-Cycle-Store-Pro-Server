@@ -6,7 +6,7 @@ import { BicycleServices } from "./bicycle.service";
 
 
 // Creat Course Function
-const createbicycle = catchAsync(async (req, res) => {
+const createBicycle = catchAsync(async (req, res) => {
     const result = await BicycleServices.createBicycleIntoDB(req.body);
 
     sendResponse(res, {
@@ -18,7 +18,28 @@ const createbicycle = catchAsync(async (req, res) => {
 });
 
 
+// All Course data Get
+const getAllBicycle = catchAsync(async (req, res) => {
+
+    // console.log(req.query);
+    
+    const result = await BicycleServices. getAllBicycleFromDB(req.query);
+    // console.log(result);
+    
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All  Bicyle get successfully',
+        // meta: result?.meta,
+        // data: result?.result,
+        data: result
+    });
+});
+
+
 
 export const BicycleControllers = {
-    createbicycle
+    createBicycle,
+    getAllBicycle
 };

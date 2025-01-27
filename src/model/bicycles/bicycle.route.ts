@@ -12,14 +12,14 @@ router.post(
     '/create-bicycle',
     // auth(USER_ROLE.admin, USER_ROLE.superAdmin),
     validateRequest(BicycleValidations.createBicycleValidationSchema),
-    BicycleControllers.createbicycle,
+    BicycleControllers.createBicycle,
 );
 
 
 // All Bicycle data get route
 router.get('/',
     // auth(USER_ROLE.superAdmin, USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
-    BicycleControllers.getAllCourses
+    BicycleControllers.getAllBicycle
 );
 
 
