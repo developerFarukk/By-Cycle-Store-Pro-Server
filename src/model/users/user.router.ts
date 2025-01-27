@@ -13,11 +13,12 @@ router.post(
     UserControllers.registerUser,
 );
 
+
 // Login User Route
-// router.post(
-//     '/login',
-//     validateRequest(AuthValidation.loginValidationSchema),
-//     AuthControllers.loginUser,
-// );
+router.post(
+    '/login',
+    validateRequest(UserValidation.loginValidationSchema),
+    UserControllers.loginUser,
+);
 
 export const UserRoutes = router;
