@@ -22,10 +22,10 @@ const createBicycle = catchAsync(async (req, res) => {
 const getAllBicycle = catchAsync(async (req, res) => {
 
     // console.log(req.query);
-    
-    const result = await BicycleServices. getAllBicycleFromDB(req.query);
+
+    const result = await BicycleServices.getAllBicycleFromDB(req.query);
     // console.log(result);
-    
+
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -38,8 +38,23 @@ const getAllBicycle = catchAsync(async (req, res) => {
 });
 
 
+// Single Course Data Get
+const getSingleBicycle = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await BicycleServices.getSingleBicycleFromDB(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Single Bicycle is retrieved succesfully',
+        data: result,
+    });
+});
+
+
 
 export const BicycleControllers = {
     createBicycle,
-    getAllBicycle
+    getAllBicycle,
+    getSingleBicycle
 };

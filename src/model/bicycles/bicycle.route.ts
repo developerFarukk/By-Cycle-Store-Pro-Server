@@ -23,5 +23,12 @@ router.get('/',
 );
 
 
+// Single  Data get Route
+router.get('/:id',
+    // auth(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.faculty, USER_ROLE.superAdmin), 
+    BicycleControllers.getSingleBicycle
+);
+
+
 
 export const BicycleRoutes = router;
