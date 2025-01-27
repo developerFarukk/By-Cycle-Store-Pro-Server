@@ -3,6 +3,8 @@ import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import httpStatus from "http-status";
 import bcrypt from 'bcrypt';
+import config from "../../config";
+import { createToken } from "./user.utils";
 
 
 // User Register function
@@ -52,19 +54,21 @@ const loginUserWithDB = async (payload: { email: string; password: string }) => 
     }
 
     //create token and sent to the  client
-    // const jwtPayload = {
-    //     userId: user.id,
-    //     role: user.role,
-    // };
+    const JwtPayload = {
+        userEmail: user?.email,
+        role: user.role,
+    };
 
-    // const token = createToken(
-    //     jwtPayload,
-    //     config.jwt_access_secret as string,
-    //     config.jwt_access_expires_in as string,
-    // );
+    const token = createToken(
+        JwtPayload,
+        config.jwt_access_secret as string,
+        config.jwt_access_expires_in as string,
+    );
 
-    // return { token };
-    return user;
+    console.log("Generated Token:", token);
+
+    return { token };
+    // return user;
 }
 
 
