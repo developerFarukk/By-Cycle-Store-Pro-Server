@@ -80,4 +80,4 @@ bicycleSchema.pre('findOne', function (next) {
     next();
 });
 
-export const Bicycle = model<TBicycle, BicycleModel>('Student', bicycleSchema);
+export const Bicycle = model<TBicycle, BicycleModel>('bicycle', bicycleSchema);

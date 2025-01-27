@@ -1,14 +1,18 @@
 
+import httpStatus from "http-status";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import { BicycleServices } from "./bicycle.service";
 
 
 // Creat Course Function
 const createbicycle = catchAsync(async (req, res) => {
-    const result = await CourseServices.createCourseIntoDB(req.body);
+    const result = await BicycleServices.createBicycleIntoDB(req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Course is created succesfully',
+        message: 'Bicycle is created succesfully',
         data: result,
     });
 });

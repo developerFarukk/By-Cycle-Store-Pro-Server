@@ -1,16 +1,16 @@
 
-
+import { TBicycle } from "./bicycle.interface";
+import { Bicycle } from "./bicycles.model";
 
 // Create bicycle
-// Creat Course Function
-const createCourseIntoDB = async (payload: TCourse) => {
-    const result = await Course.create(payload);
+const createBicycleIntoDB = async (payload: TBicycle) => {
+    const result = await Bicycle.create(payload);
     return result;
 };
 
 
 
-export const CourseServices = {
-    createCourseIntoDB,
+export const BicycleServices = {
+    createBicycleIntoDB,
 
 };
