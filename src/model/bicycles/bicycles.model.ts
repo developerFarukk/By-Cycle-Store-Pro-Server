@@ -3,6 +3,7 @@ import { BicycleModel, TBicycle } from "./bicycle.interface";
 import { BicycleBrand, BicycleType } from "./bicycle.constant";
 
 
+
 const bicycleSchema = new Schema<TBicycle>({
     name: {
         type: String,
@@ -79,5 +80,11 @@ bicycleSchema.pre('findOne', function (next) {
     this.find({ isDeleted: { $ne: true } });
     next();
 });
+
+// Spasic data send function
+// bicycleSchema.statics.getBicycleData = function (biId: string) {
+//     return this.findById(biId)
+//         .select('name  brand  price model type description bicycleImage inStock quantity')
+// };
 
 export const Bicycle = model<TBicycle, BicycleModel>('Bicycle', bicycleSchema);

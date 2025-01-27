@@ -52,9 +52,39 @@ const getSingleBicycle = catchAsync(async (req, res) => {
 });
 
 
+// Delete Course Data
+const deleteBicycle = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await BicycleServices.deleteBicycleFromDB(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Bicycle is deleted succesfully',
+        data: result,
+    });
+});
+
+
+// Update department data
+const updateBicycle = catchAsync(async (req, res) => {
+    const { bicycleId } = req.params;
+    const result = await BicycleServices.updateBicycleIntoDB( bicycleId, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Bicycle is updated succesfully',
+        data: result,
+    });
+});
+
+
 
 export const BicycleControllers = {
     createBicycle,
     getAllBicycle,
-    getSingleBicycle
+    getSingleBicycle,
+    deleteBicycle,
+    updateBicycle
 };

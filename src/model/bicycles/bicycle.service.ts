@@ -37,15 +37,48 @@ const getAllBicycleFromDB = async (query: Record<string, unknown>) => {
 // Single Course Data Get
 const getSingleBicycleFromDB = async (id: string) => {
     const result = await Bicycle.findById(id)
-    
+
     return result;
 };
+
+
+// Delete Course Data
+const deleteBicycleFromDB = async (id: string) => {
+    const result = await Bicycle.findByIdAndUpdate(
+        id,
+        { isDeleted: true },
+        {
+            new: true,
+        },
+    );
+    return result;
+};
+
+
+// Update Bicycle Data
+const updateBicycleIntoDB = async (
+    id: string,
+    payload: Partial<TBicycle>,
+) => {
+    const result = await Bicycle.findOneAndUpdate(
+        { _id: id },
+        payload,
+        {
+            new: true,
+        },
+    );
+    return result;
+};
+
+
 
 
 
 export const BicycleServices = {
     createBicycleIntoDB,
     getAllBicycleFromDB,
-    getSingleBicycleFromDB
+    getSingleBicycleFromDB,
+    deleteBicycleFromDB,
+    updateBicycleIntoDB
 
 };

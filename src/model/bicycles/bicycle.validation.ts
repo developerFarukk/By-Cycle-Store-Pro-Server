@@ -35,7 +35,23 @@ export const createBicycleValidationSchema = z.object({
 });
 
 
+// Update Bicycle Zod Route Validation
+export const UpdateBicycleValidationSchema = z.object({
+    body: z.object({
+        name: z.string().optional(),
+        brand: TBicycleBrandSchema.optional(),
+        price: z.number().positive().optional(),
+        model: z.string().optional(),
+        type: TBicycleTypeSchema.optional(),
+        description: z.string().optional(),
+        quantity: z.number().int().nonnegative().optional(),
+        bicycleImage: z.string().url().optional(),
+    })
+});
+
+
 
 export const BicycleValidations = {
     createBicycleValidationSchema,
+    UpdateBicycleValidationSchema
 };
