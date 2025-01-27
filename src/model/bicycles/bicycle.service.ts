@@ -71,9 +71,6 @@ const updateBicycleIntoDB = async (
 };
 
 
-
-
-
 export const BicycleServices = {
     createBicycleIntoDB,
     getAllBicycleFromDB,

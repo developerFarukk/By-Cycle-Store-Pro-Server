@@ -4,6 +4,8 @@ export type TBicycleBrand = 'Duranta' | 'Atlas' | 'Hero' | 'Phoenix' | 'Tata Str
 
 export type TBicycleType = 'Road' | 'Mountain' | 'Hybrid' | 'Electric';
 
+export type TBicyclestatus = 'Stock' | 'Stock Out' ;
+
 export interface TBicycle {
     name: string;
     brand: TBicycleBrand
@@ -12,7 +14,7 @@ export interface TBicycle {
     type: TBicycleType
     description: string;
     quantity: number;
-    inStock: boolean;
+    status: TBicyclestatus;
     isDeleted: boolean;
     bicycleImage?: string
 }

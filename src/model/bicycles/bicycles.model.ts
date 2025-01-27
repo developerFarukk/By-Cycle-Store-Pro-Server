@@ -1,6 +1,8 @@
 import { model, Schema } from "mongoose";
 import { BicycleModel, TBicycle } from "./bicycle.interface";
-import { BicycleBrand, BicycleType } from "./bicycle.constant";
+import { BicycleBrand, BicycleStatus, BicycleType } from "./bicycle.constant";
+import AppError from "../../errors/AppError";
+import httpStatus from 'http-status';
 
 
 
@@ -52,9 +54,15 @@ const bicycleSchema = new Schema<TBicycle>({
         min: 0,
         default: 0
     },
-    inStock: {
-        type: Boolean,
-        default: true,
+    status: {
+        type: String,
+        required: [true, 'Bicycle Stock is required'],
+        trim: true,
+        enum: {
+            values: BicycleStatus,
+            message: '{VALUE} is not a valid status',
+        },
+        default: "Stock"
     },
     isDeleted: {
         type: Boolean,
@@ -80,6 +88,49 @@ bicycleSchema.pre('findOne', function (next) {
     this.find({ isDeleted: { $ne: true } });
     next();
 });
+
+// Add Stock Function
+bicycleSchema.pre('save', function (next) {
+    if (this.quantity < 0) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'Quantity cannot be negative');
+    }
+
+    // Set status based on quantity
+    if (this.quantity === 0) {
+        this.status = 'Stock Out';
+    } else {
+        this.status = 'Stock';
+    }
+    next();
+});
+
+// Update Stock Function
+bicycleSchema.pre('findOneAndUpdate', async function (next) {
+    const update = this.getUpdate();
+
+    // Ensure the update object is not null
+    if (!update || typeof update !== "object") {
+        return next();
+    }
+
+    // Check if update is of type UpdateQuery
+    if ("quantity" in update) {
+        if (update.quantity < 0) {
+            throw new AppError(httpStatus.BAD_REQUEST, 'Quantity cannot be negative');
+        }
+
+        // Set status based on quantity
+        if (update.quantity === 0) {
+            update.status = 'Stock Out';
+        } else if (update.quantity > 0) {
+            update.status = 'Stock';
+        }
+    }
+
+    next();
+});
+
+
 
 // Spasic data send function
 // bicycleSchema.statics.getBicycleData = function (biId: string) {
