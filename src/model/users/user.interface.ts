@@ -1,8 +1,8 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 
 export interface TUser {
-    // id: string;
+    id?: Types.ObjectId;
     name: string;
     email: string;
     password: string;
@@ -13,6 +13,8 @@ export interface TUser {
 
 
 export interface UserModel extends Model<TUser> {
+
+    getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'>>;
 
     //instance methods for checking if passwords are matched
     isPasswordMatched(
