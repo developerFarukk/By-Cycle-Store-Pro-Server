@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import { BicycleModel, TBicycle } from "./bicycle.interface";
-import { BicycleBrand } from "./bicycle.constant";
+import { BicycleBrand, BicycleType } from "./bicycle.constant";
 
 
 const bicycleSchema = new Schema<TBicycle>({
@@ -12,7 +12,7 @@ const bicycleSchema = new Schema<TBicycle>({
     },
     brand: {
         type: String,
-        required: [true, 'Bike brand is required'],
+        required: [true, 'Bicycle brand is required'],
         trim: true,
         enum: {
             values: BicycleBrand,
@@ -35,7 +35,7 @@ const bicycleSchema = new Schema<TBicycle>({
         required: [true, ' Inpute Bike Type is Road, Mountain, Hybrid, Electric'],
         trim: true,
         enum: {
-            values: ['Road', 'Mountain', 'Hybrid', 'Electric'],
+            values: BicycleType,
             message: `{VALUE} is not valid,  please inpute valid value`
         },
     },
@@ -58,15 +58,24 @@ const bicycleSchema = new Schema<TBicycle>({
     isDeleted: {
         type: Boolean,
         default: true
-    }
+    },
+    bicycleImage: {
+        type: String,
+        default: ''
+    },                
 },
     {
         timestamps: true,
-        versionKey: false
+
     }
 )
 
 bicycleSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
+
+bicycleSchema.pre('findOne', function (next) {
     this.find({ isDeleted: { $ne: true } });
     next();
 });
