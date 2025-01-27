@@ -22,16 +22,16 @@ export const TBicycleTypeSchema = z.enum(['Road', 'Mountain', 'Hybrid', 'Electri
 
 // Create Bicycle Zod Route Validation
 export const createBicycleValidationSchema = z.object({
-    name: z.string(),
-    brand: TBicycleBrandSchema,
-    price: z.number().positive(),
-    model: z.string(),
-    type: TBicycleTypeSchema,
-    description: z.string(),
-    quantity: z.number().int().nonnegative(),
-    inStock: z.boolean(),
-    isDeleted: z.boolean(),
-    bicycleImage: z.string().url().optional(),
+    body: z.object({
+        name: z.string(),
+        brand: TBicycleBrandSchema,
+        price: z.number().positive(),
+        model: z.string(),
+        type: TBicycleTypeSchema,
+        description: z.string(),
+        quantity: z.number().int().nonnegative(),
+        bicycleImage: z.string().url().optional(),
+    })
 });
 
 

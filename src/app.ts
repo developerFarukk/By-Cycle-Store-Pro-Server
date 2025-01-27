@@ -3,6 +3,8 @@ import cors from 'cors';
 import express, { Application, Request, Response } from 'express'
 import cookieParser from 'cookie-parser';
 import router from './routes';
+import globalErrorHandler from './middlewares/globalErrorhandler';
+import notFound from './middlewares/notFound';
 
 
 const app: Application = express();
@@ -30,9 +32,9 @@ app.get('/', getAController);
 
 
 // Global Error Handelar
-// app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 //Not Found Page function
-// app.use(notFound);
+app.use(notFound);
 
 export default app
