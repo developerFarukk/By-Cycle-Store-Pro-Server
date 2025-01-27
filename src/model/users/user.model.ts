@@ -71,6 +71,12 @@ userSchema.post('save', function (doc, next) {
 });
 
 
+// Spasic data send function
+userSchema.statics.getPublicUserData = function (userId: string) {
+    return this.findById(userId).select('id name email isDeleted status role');
+};
+
+
 // Password Matched
 userSchema.statics.isPasswordMatched = async function (
     plainTextPassword,
