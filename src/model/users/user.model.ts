@@ -1,5 +1,7 @@
-import { Schema } from "mongoose";
-import { TUser } from "./user.interface";
+import { model, Schema } from "mongoose";
+import { TUser, UserModel } from "./user.interface";
+import bcrypt from 'bcrypt';
+import config from "../../config";
 
 
 const userSchema = new Schema<TUser>(
@@ -24,7 +26,7 @@ const userSchema = new Schema<TUser>(
         },
         role: {
             type: String,
-            enum: [ 'admin', 'customer'],
+            enum: ['admin', 'customer'],
             default: "customer"
         },
         status: {
@@ -43,3 +45,32 @@ const userSchema = new Schema<TUser>(
     },
 );
 
+
+userSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this; // doc
+    // hashing password and save into DB
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds),
+    );
+    next();
+});
+
+// set '' after saving password
+userSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+});
+
+
+// Password Matched
+userSchema.statics.isPasswordMatched = async function (
+    plainTextPassword,
+    hashedPassword,
+) {
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+
+
+export const User = model<TUser, UserModel>('User', userSchema);
