@@ -29,7 +29,7 @@ const userSchema = new Schema<TUser>(
             type: String,
             required: [true, 'Password id is required'],
             maxlength: [4, 'User password can not be more than 4 characters'],
-            select: 0
+            select: false
         },
         role: {
             type: String,
