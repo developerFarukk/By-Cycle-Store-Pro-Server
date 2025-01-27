@@ -5,7 +5,9 @@ import { BikID } from './bik.interface';
 const bikSchema = new Schema<BikID>({
     name: {
         type: String,
+        trim: true,
         required: [true, 'Bike Name is required'],
+        
     },
     brand: {
         type: String,
