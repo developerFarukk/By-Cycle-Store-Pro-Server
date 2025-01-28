@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
-import Bike from "../products/bik.model";
 import Order from "./order.model";
-import {  createOrderValid } from "./order.interface";
 
-// Bycykle Order Created functionality
+// Bicykle Order Created functionality
 const orderBik = async (data: unknown) => {
 
     // Validate input using Zod
-    const { email, product, quantity, totalPrice } = createOrderValid.parse(data);
+    // const { email, product, quantity, totalPrice } = createOrderValid.parse(data);
 
     // Convert product ID to ObjectId
     const productId = new mongoose.Types.ObjectId(product);
