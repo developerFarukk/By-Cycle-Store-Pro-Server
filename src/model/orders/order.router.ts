@@ -1,10 +1,18 @@
-import { Router } from "express";
-import { orderController } from "./order.controller";
 
 
-const orderRouter = Router()
+import express from 'express';
+import { OrderController } from './order.controller';
 
-orderRouter.post('/', orderController.orderBik)
-orderRouter.get("/revenue", orderController.calculateRevenue)
+const router = express.Router();
 
-export default orderRouter
+
+// Create Bicycle Route
+router.post(
+    '/create-order',
+    // auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+    // validateRequest(BicycleValidations.createBicycleValidationSchema),
+    OrderController.createOrder,
+);
+
+
+export const OrderRoutes = router;

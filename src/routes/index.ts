@@ -3,6 +3,7 @@
 import { Router } from "express";
 import { BicycleRoutes } from "../model/bicycles/bicycle.route";
 import { UserRoutes } from "../model/users/user.router";
+import { OrderRoutes } from "../model/orders/order.router";
 
 
 
@@ -16,6 +17,10 @@ const moduleRoutes = [
     {
         path: '/users',
         route: UserRoutes,
+    },
+    {
+        path: '/orders',
+        route: OrderRoutes,
     },
 
 ];

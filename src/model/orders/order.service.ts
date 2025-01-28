@@ -1,79 +1,55 @@
-import mongoose from "mongoose";
+
+import AppError from "../../errors/AppError";
+import { Bicycle } from "../bicycles/bicycles.model";
+import { TOrder } from "./order.interface";
 import Order from "./order.model";
+import httpStatus from "http-status";
 
-// Bicykle Order Created functionality
-const orderBik = async (data: unknown) => {
 
-    // Validate input using Zod
-    // const { email, product, quantity, totalPrice } = createOrderValid.parse(data);
+// Create Order Function
+const createOrderIntoDB = async (payload: TOrder) => {
+    
+    // Find the bicycle
+    const bicycle = await Bicycle.findById(payload.productId);
 
-    // Convert product ID to ObjectId
-    const productId = new mongoose.Types.ObjectId(product);
+    // checking if the product is Blocked
+    const isBlocked = bicycle?.isDeleted
 
-    // Check if the product exists in the database
-    const productData = await Bike.aggregate([
-        { $match: { _id: productId } },
-        {
-            $project: {
-                name: 1,
-                quantity: 1,
-                inStock: 1,
-            },
-        },
-    ]);
-
-    // If product is not found, throw an error
-    if (!productData.length) {
-        throw new Error("Product not found");
+    if (isBlocked) {
+        throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Prodicts is deleted !');
     }
 
-    const [productInfo] = productData;
-
-    // Check if there's sufficient stock
-    if (productInfo.quantity < quantity) {
-        throw new Error("Insufficient stock available");
+// Checking Existing product
+    if (!bicycle) {
+        throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
     }
 
-    // Update product inventory
-    const updatedProduct = await Bike.findOneAndUpdate(
-        { _id: productId, quantity: { $gte: quantity } }, // Correctly pass the product ID as ObjectId
-        {
-            $inc: { quantity: -quantity }, // Decrease the quantity
-            $set: { inStock: productInfo.quantity - quantity > 0 }, // Update inStock flag
-        },
-        { new: true }
-    );
-
-    if (!updatedProduct) {
-        throw new Error("Failed to update product inventory");
+    // Step 2: Check stock availability
+    if (bicycle.quantity < payload.quantity) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
     }
 
-    // Create a new order
-    const order = await Order.create({
-        email,
-        product: productId,
-        quantity,
+    // Step 3: Calculate the total price
+    const totalPrice = bicycle.price * payload.quantity;
+
+    // Step 4: Deduct the stock
+    bicycle.quantity -= payload.quantity;
+    await bicycle.save();
+
+    // Step 5: Create the order
+    const orderData: TOrder = {
+        ...payload,
         totalPrice,
-    });
+        status: "Pending",
+        paymentStatus: "Unpaid",
+    };
 
-    // Ensure the order was created successfully
-    if (!order) {
-        throw new Error("Failed to create order");
-    }
+    const order = await Order.create(orderData);
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-        order._id,
-        { status: "Completed", updatedAt: new Date() },
-        { new: true }
-    );
+    return order;
+};
 
-    if (!updatedOrder) {
-        throw new Error("Failed to update order after creation");
-    }
 
-    return updatedOrder;
-}
-
-export const orderService = {
-    orderBik,
+export const OrderService = {
+    createOrderIntoDB,
 };
