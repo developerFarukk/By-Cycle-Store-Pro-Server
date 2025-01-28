@@ -8,7 +8,7 @@ import httpStatus from "http-status";
 
 // Create Order Function
 const createOrderIntoDB = async (payload: TOrder) => {
-    
+
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
 
@@ -19,24 +19,24 @@ const createOrderIntoDB = async (payload: TOrder) => {
         throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Prodicts is deleted !');
     }
 
-// Checking Existing product
+    // Checking Existing product
     if (!bicycle) {
         throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
     }
 
-    // Step 2: Check stock availability
+    // Check stock availability
     if (bicycle.quantity < payload.quantity) {
         throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
     }
 
-    // Step 3: Calculate the total price
+    // Calculate the total price
     const totalPrice = bicycle.price * payload.quantity;
 
-    // Step 4: Deduct the stock
+    //  Deduct the stock
     bicycle.quantity -= payload.quantity;
     await bicycle.save();
 
-    // Step 5: Create the order
+    //  Create the order
     const orderData: TOrder = {
         ...payload,
         totalPrice,
