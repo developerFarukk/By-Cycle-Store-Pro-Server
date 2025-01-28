@@ -26,8 +26,12 @@ const bicycleSchema = new Schema<TBicycle>({
         type: Number,
         required: [true, 'Bicycle Price is required'],
         trim: true,
-        min: 0,
-        default: 0
+        min: [0, 'Price cannot be negative'],
+        default: 0,
+        validate: {
+            validator: Number.isInteger,
+            message: 'Price must be an integer value',
+        },
     },
     model: {
         type: String,
