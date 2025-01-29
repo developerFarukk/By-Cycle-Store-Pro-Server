@@ -9,7 +9,7 @@ import { User } from "../users/user.model";
 
 
 // Create Order Function
-const createOrderIntoDB = async (payload: TOrder, userEmail: string) => {
+const createOrderIntoDB = async (payload: TOrder, userId: string) => {
 
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
@@ -38,10 +38,10 @@ const createOrderIntoDB = async (payload: TOrder, userEmail: string) => {
     bicycle.quantity -= payload.quantity;
     await bicycle.save();
 
-    const user = await User.isUserExistsByCustomId(userEmail);
+    // const user = await User.isUserExistsByCustomId(userEmail);
 
-    const userId = user ? user.id : 0;
-    console.log(userId);
+    // const userId = user ? user.id : 0;
+    // console.log(userId);
     
     
     //  Create the order

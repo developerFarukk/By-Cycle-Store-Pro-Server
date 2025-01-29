@@ -6,7 +6,7 @@ export const createToken = (
     jwtPayload: {
         userEmail: string;
         role: string,
-        // userId: string
+        userId: string
     },
     secret: Secret,
     expiresIn: string | number
