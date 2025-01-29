@@ -1,4 +1,5 @@
 
+import { Types } from "mongoose";
 import AppError from "../../errors/AppError";
 import { Bicycle } from "../bicycles/bicycles.model";
 import { TOrder } from "./order.interface";
@@ -7,7 +8,7 @@ import httpStatus from "http-status";
 
 
 // Create Order Function
-const createOrderIntoDB = async (payload: TOrder) => {
+const createOrderIntoDB = async (payload: TOrder, userId: string) => {
 
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
@@ -39,6 +40,7 @@ const createOrderIntoDB = async (payload: TOrder) => {
     //  Create the order
     const orderData: TOrder = {
         ...payload,
+        user: new Types.ObjectId(userId),
         totalPrice,
         status: "Pending",
         paymentStatus: "Unpaid",
