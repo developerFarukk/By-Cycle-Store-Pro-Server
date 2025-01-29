@@ -4,6 +4,8 @@ import express from 'express';
 import { OrderController } from './order.controller';
 import { USER_ROLE } from '../users/user.constant';
 import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
+import { OrderValidations } from './order.validation';
 
 const router = express.Router();
 
@@ -12,7 +14,7 @@ const router = express.Router();
 router.post(
     '/create-order',
     auth(USER_ROLE.admin, USER_ROLE.customer),
-    // validateRequest(BicycleValidations.createBicycleValidationSchema),
+    validateRequest(OrderValidations.createOrderValidationSchema),
     OrderController.createOrder,
 );
 

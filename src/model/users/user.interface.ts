@@ -15,7 +15,7 @@ export interface TUser {
 
 export interface UserModel extends Model<TUser> {
 
-    isUserExistsByCustomId(id: string): Promise<TUser>;
+    isUserExistsByCustomId(email: string): Promise<TUser>;
 
     getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'>>;
 

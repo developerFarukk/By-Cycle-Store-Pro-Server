@@ -5,10 +5,11 @@ import { Bicycle } from "../bicycles/bicycles.model";
 import { TOrder } from "./order.interface";
 import Order from "./order.model";
 import httpStatus from "http-status";
+import { User } from "../users/user.model";
 
 
 // Create Order Function
-const createOrderIntoDB = async (payload: TOrder, userId: string) => {
+const createOrderIntoDB = async (payload: TOrder, userEmail: string) => {
 
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
@@ -37,6 +38,12 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
     bicycle.quantity -= payload.quantity;
     await bicycle.save();
 
+    const user = await User.isUserExistsByCustomId(userEmail);
+
+    const userId = user ? user.id : 0;
+    console.log(userId);
+    
+    
     //  Create the order
     const orderData: TOrder = {
         ...payload,
@@ -45,8 +52,9 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
         status: "Pending",
         paymentStatus: "Unpaid",
     };
-
+    
     const order = await Order.create(orderData);
+    
 
     return order;
 };

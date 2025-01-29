@@ -77,8 +77,8 @@ userSchema.statics.getPublicUserData = function (userId: string) {
 };
 
 // Existing ID
-userSchema.statics.isUserExistsByCustomId = async function (id: string) {
-    return await User.findOne({ id })
+userSchema.statics.isUserExistsByCustomId = async function (email: string) {
+    return await User.findOne({ email })
 };
 
 

@@ -86,11 +86,13 @@ import httpStatus from "http-status";
 // Creat Course Function
 const createOrder = catchAsync(async (req, res) => {
     
-    const userId = req.user?.userId;
-    console.log(userId);
+    const userEmail = req.user?.userEmail
+    // console.log(userId);
     
 
-    const result = await OrderService.createOrderIntoDB(req.body, userId);
+    const result = await OrderService.createOrderIntoDB(req.body, userEmail );
+    console.log(result);
+    
 
     sendResponse(res, {
         statusCode: httpStatus.OK,

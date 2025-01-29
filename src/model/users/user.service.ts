@@ -55,6 +55,7 @@ const loginUserWithDB = async (payload: { email: string; password: string }) => 
 
     //create token and sent to the  client
     const JwtPayload = {
+        userId: user._id.toString(),
         userEmail: user?.email,
         role: user.role,
     };
