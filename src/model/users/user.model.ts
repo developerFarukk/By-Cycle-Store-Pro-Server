@@ -76,6 +76,11 @@ userSchema.statics.getPublicUserData = function (userId: string) {
     return this.findById(userId).select('id name email isDeleted status role');
 };
 
+// Existing ID
+userSchema.statics.isUserExistsByCustomId = async function (id: string) {
+    return await User.findOne({ id })
+};
+
 
 // Password Matched
 userSchema.statics.isPasswordMatched = async function (

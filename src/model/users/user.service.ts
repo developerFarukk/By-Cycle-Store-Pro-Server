@@ -65,7 +65,7 @@ const loginUserWithDB = async (payload: { email: string; password: string }) => 
         config.jwt_access_expires_in as string,
     );
 
-    console.log("Generated Token:", token);
+    // console.log("Generated Token:", token);
 
     return { token };
     // return user;

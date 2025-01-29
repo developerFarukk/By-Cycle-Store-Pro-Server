@@ -1,4 +1,5 @@
 import { Model, Types } from "mongoose";
+import { USER_ROLE } from "./user.constant";
 
 
 export interface TUser {
@@ -14,6 +15,8 @@ export interface TUser {
 
 export interface UserModel extends Model<TUser> {
 
+    isUserExistsByCustomId(id: string): Promise<TUser>;
+
     getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'>>;
 
     //instance methods for checking if passwords are matched
@@ -22,3 +25,6 @@ export interface UserModel extends Model<TUser> {
         hashedPassword: string,
     ): Promise<boolean>;
 }
+
+
+export type TUserRole = keyof typeof USER_ROLE;
