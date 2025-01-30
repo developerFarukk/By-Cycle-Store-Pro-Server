@@ -6,7 +6,7 @@ import { TOrder } from "./order.interface";
 import Order from "./order.model";
 import httpStatus from "http-status";
 import QueryBuilder from "../../builder/QueryBuilder";
-import { OrderSearchableFields } from "./order.constant";
+import { isValidStatusTransition, OrderSearchableFields } from "./order.constant";
 
 
 // Create Order Function
@@ -142,6 +142,17 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
     const order = await Order.findById(id);
     if (!order) {
         throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found!');
+    }
+
+    // Check if status is being updated
+    if (payload.status && payload.status !== order.status) {
+
+        if (!isValidStatusTransition(order.status, payload.status)) {
+            throw new AppError(
+                httpStatus.BAD_REQUEST,
+                `Invalid status transition from ${order.status} to ${payload.status}`
+            );
+        }
     }
 
     // Find the bicycle
