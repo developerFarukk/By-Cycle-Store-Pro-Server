@@ -21,14 +21,7 @@ export interface TBicycle {
 }
 
 
+
 export interface BicycleModel extends Model<TBicycle> {
-
-    isBicycleExists(_id: string): Promise<TBicycle | null>;
-
-    // getBicycleData(id: string): Promise<Pick<TBicycle, 'name' | 'brand' | 'price' | 'model' | 'type' | 'description' | 'bicycleImage' | 'inStock' | 'quantity'>>;
+    isBicycleExists(id: string): Promise<TBicycle | null>;
 }
-
-
-// export interface SpasificBicycleModel extends Model<TBicycle> {
-//     getBicycleData(userId: string): Promise<Pick<TBicycle, '_id' | 'title' | 'content' | 'author'>>;
-// }

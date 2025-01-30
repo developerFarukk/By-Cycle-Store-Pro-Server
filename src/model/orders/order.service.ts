@@ -99,24 +99,44 @@ const deleteOrderFromDB = async (id: string) => {
 
 
 // Update Order
+// const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
+
+//     // Find the order
+//     const order = await Order.findById(id);
+//     if (!order) {
+//         throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found!');
+//     }
+
+//     // Find the bicycle
+//     const bicycle = await Bicycle.isBicycleExists(order.productId.toString());
+
+//     // console.log("Bicycle", bicycle);
+
+//     if (!bicycle) {
+//         throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
+//     }
+
+//     // Check if the requested quantity is available in stock
+//     if (payload.quantity && payload.quantity > bicycle.quantity) {
+//         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient stock for this bicycle!');
+//     }
+
+//     // Calculate totalPrice if quantity is updated
+//     if (payload.quantity) {
+//         payload.totalPrice = bicycle.price * payload.quantity;
+//     }
+
+//     const result = await Order.findOneAndUpdate(
+//         { _id: id },
+//         payload,
+//         {
+//             new: true,
+//         },
+//     );
+//     return result;
+// };
+
 const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
-
-    // const order = await Order.findById(id);
-    // // console.log(order);
-
-    // const productId = order ? order.productId : 2;
-    // // console.log(productId.toString());
-
-
-    // // Find the bicycle
-    // const bicycle = await Bicycle.isBicycleExists(productId.toString())
-    // console.log(bicycle);
-
-
-    // // Check blog Exist
-    // if (!order) {
-    //     throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found !');
-    // }
 
     // Find the order
     const order = await Order.findById(id);
@@ -126,16 +146,34 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
 
     // Find the bicycle
     const bicycle = await Bicycle.isBicycleExists(order.productId.toString());
+    // console.log(bicycle);
 
-    console.log("Bicycle", bicycle);
-    
     if (!bicycle) {
         throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
     }
 
     // Check if the requested quantity is available in stock
-    if (payload.quantity && payload.quantity > bicycle.quantity) {
+    if (payload.quantity && payload.quantity > bicycle.quantity + order.quantity) {
         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient stock for this bicycle!');
+    }
+
+    // Calculate the difference between new quantity and old quantity
+    const quantityDifference = payload.quantity ? payload.quantity - order.quantity : 0;
+    console.log(quantityDifference);
+
+
+    // Update Bicycle quantity based on the difference
+    // if (quantityDifference !== 0) {
+    //     bicycle.quantity -= quantityDifference; 
+    //     await bicycle.save(); 
+    // }
+
+    if (quantityDifference !== 0) {
+        await Bicycle.findByIdAndUpdate(
+            bicycle.id,
+            { $inc: { quantity: -quantityDifference } },
+            { new: true }
+        );
     }
 
     // Calculate totalPrice if quantity is updated
@@ -143,15 +181,16 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
         payload.totalPrice = bicycle.price * payload.quantity;
     }
 
+    // Update the order
     const result = await Order.findOneAndUpdate(
         { _id: id },
         payload,
-        {
-            new: true,
-        },
+        { new: true }
     );
+
     return result;
 };
+
 
 
 export const OrderService = {

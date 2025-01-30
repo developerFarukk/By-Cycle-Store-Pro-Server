@@ -135,6 +135,10 @@ bicycleSchema.pre('findOneAndUpdate', async function (next) {
 });
 
 
+// bicycleSchema.statics.isBicycleExists = async function (id: string) {
+//     return await Bicycle.findOne({ _id: id });
+// };
+
 bicycleSchema.statics.isBicycleExists = async function (id: string) {
     return await Bicycle.findOne({ _id: id });
 };

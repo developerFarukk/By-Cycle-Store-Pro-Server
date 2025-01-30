@@ -62,6 +62,9 @@ const updateOrder = catchAsync(async (req, res) => {
     
     const result = await OrderService.updateOrderIntoDB(orderId, req.body);
 
+    console.log(result);
+    
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
