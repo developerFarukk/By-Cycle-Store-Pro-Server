@@ -5,7 +5,8 @@ import { Bicycle } from "../bicycles/bicycles.model";
 import { TOrder } from "./order.interface";
 import Order from "./order.model";
 import httpStatus from "http-status";
-import { User } from "../users/user.model";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { OrderSearchableFields } from "./order.constant";
 
 
 // Create Order Function
@@ -42,8 +43,8 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
 
     // const userId = user ? user.id : 0;
     // console.log(userId);
-    
-    
+
+
     //  Create the order
     const orderData: TOrder = {
         ...payload,
@@ -52,14 +53,37 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
         status: "Pending",
         paymentStatus: "Unpaid",
     };
-    
+
     const order = await Order.create(orderData);
-    
+
 
     return order;
+};
+
+// get All Order
+const getAllOrderFromDB = async (query: Record<string, unknown>) => {
+    // console.log(query);
+
+    const orderQuery = new QueryBuilder(Order.find().populate('user').populate('productId'),
+        query,
+    )
+        .search(OrderSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const meta = await orderQuery.countTotal();
+    const result = await orderQuery.modelQuery;
+
+    return {
+        meta,
+        result,
+    };
 };
 
 
 export const OrderService = {
     createOrderIntoDB,
+    getAllOrderFromDB
 };
