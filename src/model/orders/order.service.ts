@@ -85,7 +85,15 @@ const getAllOrderFromDB = async (query: Record<string, unknown>) => {
 
 // Delete Order Data
 const deleteOrderFromDB = async (id: string) => {
-    const result = await Order.findByIdAndDelete( id );
+
+    const order = await Order.findById(id);
+
+    // Check blog Exist
+    if (!order) {
+        throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found !');
+    }
+
+    const result = Order.findByIdAndDelete(id)
     return result;
 };
 
