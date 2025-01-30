@@ -135,6 +135,11 @@ bicycleSchema.pre('findOneAndUpdate', async function (next) {
 });
 
 
+bicycleSchema.statics.isBicycleExists = async function (id: string) {
+    return await Bicycle.findOne({ _id: id });
+};
+
+
 
 // Spasic data send function
 // bicycleSchema.statics.getBicycleData = function (biId: string) {
