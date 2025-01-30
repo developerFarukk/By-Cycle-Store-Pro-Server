@@ -98,8 +98,23 @@ const deleteOrderFromDB = async (id: string) => {
 };
 
 
+// Update Order
+const updateOrderIntoDB = async ( id: string, payload: Partial<TOrder> ) => {
+    
+    const result = await Bicycle.findOneAndUpdate(
+        { _id: id },
+        payload,
+        {
+            new: true,
+        },
+    );
+    return result;
+};
+
+
 export const OrderService = {
     createOrderIntoDB,
     getAllOrderFromDB,
-    deleteOrderFromDB
+    deleteOrderFromDB,
+    updateOrderIntoDB
 };
