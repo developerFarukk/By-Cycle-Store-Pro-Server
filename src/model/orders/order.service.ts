@@ -159,7 +159,6 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
 
     // Calculate the difference between new quantity and old quantity
     const quantityDifference = payload.quantity ? payload.quantity - order.quantity : 0;
-    // console.log(quantityDifference);
 
 
     if (quantityDifference !== 0) {
