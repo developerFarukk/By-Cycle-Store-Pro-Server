@@ -5,7 +5,7 @@ import sendResponse from "../../utils/sendResponse";
 import { BicycleServices } from "./bicycle.service";
 
 
-// Creat Course Function
+// Creat Bicycle Function
 const createBicycle = catchAsync(async (req, res) => {
     const result = await BicycleServices.createBicycleIntoDB(req.body);
 
@@ -18,7 +18,7 @@ const createBicycle = catchAsync(async (req, res) => {
 });
 
 
-// All Course data Get
+// All Bicycle data Get
 const getAllBicycle = catchAsync(async (req, res) => {
 
     // console.log(req.query);
@@ -38,7 +38,7 @@ const getAllBicycle = catchAsync(async (req, res) => {
 });
 
 
-// Single Course Data Get
+// Single Bicycle Data Get
 const getSingleBicycle = catchAsync(async (req, res) => {
     const { id } = req.params;
     const result = await BicycleServices.getSingleBicycleFromDB(id);
@@ -52,7 +52,7 @@ const getSingleBicycle = catchAsync(async (req, res) => {
 });
 
 
-// Delete Course Data
+// Delete Bicycle Data
 const deleteBicycle = catchAsync(async (req, res) => {
     const { id } = req.params;
     const result = await BicycleServices.deleteBicycleFromDB(id);
@@ -66,7 +66,7 @@ const deleteBicycle = catchAsync(async (req, res) => {
 });
 
 
-// Update department data
+// Update Bicycle data
 const updateBicycle = catchAsync(async (req, res) => {
     const { bicycleId } = req.params;
     const result = await BicycleServices.updateBicycleIntoDB( bicycleId, req.body);

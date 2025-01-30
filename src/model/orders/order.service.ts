@@ -1,7 +1,7 @@
 
 import { Types } from "mongoose";
 import AppError from "../../errors/AppError";
-import { Bicycle } from "../bicycles/bicycles.model";
+import { Bicycle } from "../bicycles/bicycle.model";
 import { TOrder } from "./order.interface";
 import Order from "./order.model";
 import httpStatus from "http-status";
@@ -83,7 +83,15 @@ const getAllOrderFromDB = async (query: Record<string, unknown>) => {
 };
 
 
+// Delete Order Data
+const deleteOrderFromDB = async (id: string) => {
+    const result = await Order.findByIdAndDelete( id );
+    return result;
+};
+
+
 export const OrderService = {
     createOrderIntoDB,
-    getAllOrderFromDB
+    getAllOrderFromDB,
+    deleteOrderFromDB
 };

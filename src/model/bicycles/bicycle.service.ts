@@ -2,7 +2,7 @@
 import QueryBuilder from "../../builder/QueryBuilder";
 import { BicycleSearchableFields } from "./bicycle.constant";
 import { TBicycle } from "./bicycle.interface";
-import { Bicycle } from "./bicycles.model";
+import { Bicycle } from "./bicycle.model";
 
 // Create bicycle
 const createBicycleIntoDB = async (payload: TBicycle) => {
@@ -34,7 +34,7 @@ const getAllBicycleFromDB = async (query: Record<string, unknown>) => {
 };
 
 
-// Single Course Data Get
+// Single Bicycle Data Get
 const getSingleBicycleFromDB = async (id: string) => {
     const result = await Bicycle.findById(id)
 
@@ -42,7 +42,7 @@ const getSingleBicycleFromDB = async (id: string) => {
 };
 
 
-// Delete Course Data
+// Delete Bicycle Data
 const deleteBicycleFromDB = async (id: string) => {
     const result = await Bicycle.findByIdAndUpdate(
         id,
