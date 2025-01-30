@@ -98,44 +98,6 @@ const deleteOrderFromDB = async (id: string) => {
 };
 
 
-// Update Order
-// const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
-
-//     // Find the order
-//     const order = await Order.findById(id);
-//     if (!order) {
-//         throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found!');
-//     }
-
-//     // Find the bicycle
-//     const bicycle = await Bicycle.isBicycleExists(order.productId.toString());
-
-//     // console.log("Bicycle", bicycle);
-
-//     if (!bicycle) {
-//         throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
-//     }
-
-//     // Check if the requested quantity is available in stock
-//     if (payload.quantity && payload.quantity > bicycle.quantity) {
-//         throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient stock for this bicycle!');
-//     }
-
-//     // Calculate totalPrice if quantity is updated
-//     if (payload.quantity) {
-//         payload.totalPrice = bicycle.price * payload.quantity;
-//     }
-
-//     const result = await Order.findOneAndUpdate(
-//         { _id: id },
-//         payload,
-//         {
-//             new: true,
-//         },
-//     );
-//     return result;
-// };
-
 const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
 
     // Find the order
