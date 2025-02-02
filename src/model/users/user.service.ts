@@ -5,6 +5,8 @@ import httpStatus from "http-status";
 import bcrypt from 'bcrypt';
 import config from "../../config";
 import { createToken } from "./user.utils";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { userSearchableFields } from "./user.constant";
 
 
 // User Register function
@@ -73,8 +75,31 @@ const loginUserWithDB = async (payload: { email: string; password: string }) => 
 }
 
 
+// Get all user
+const getAllUserFromDB = async (query: Record<string, unknown>) => {
+
+    const userQuery = new QueryBuilder(User.find(),
+        query,
+    )
+        .search(userSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const meta = await userQuery.countTotal();
+    const result = await userQuery.modelQuery;
+
+    return {
+        meta,
+        result,
+    };
+};
+
+
 
 export const UserService = {
     userRegisterDB,
-    loginUserWithDB
+    loginUserWithDB,
+    getAllUserFromDB
 }

@@ -7,3 +7,6 @@ export const USER_ROLE = {
 
 
 export const UserStatus = ['in-progress', 'blocked'];
+
+
+export const userSearchableFields = ['name', 'email', '_id'];

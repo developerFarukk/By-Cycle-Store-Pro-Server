@@ -50,8 +50,8 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
         ...payload,
         user: new Types.ObjectId(userId),
         totalPrice,
-        status: "Pending",
-        paymentStatus: "Unpaid",
+        // status: "Pending",
+        // paymentStatus: "Unpaid",
     };
 
     const order = await Order.create(orderData);

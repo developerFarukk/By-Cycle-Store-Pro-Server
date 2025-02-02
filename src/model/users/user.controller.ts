@@ -32,7 +32,25 @@ const loginUser = catchAsync(async (req, res) => {
 });
 
 
+// get All User
+const getAlluser = catchAsync(async (req, res) => {
+
+    const result = await UserService.getAllUserFromDB(req.query);
+    // console.log(result);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All user get successfully',
+        // meta: result?.meta,
+        // data: result?.result,
+        data: result
+    });
+});
+
+
 export const UserControllers = {
     registerUser,
-    loginUser
+    loginUser,
+    getAlluser 
 }
