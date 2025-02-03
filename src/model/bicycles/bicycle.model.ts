@@ -56,7 +56,7 @@ const bicycleSchema = new Schema<TBicycle>({
         required: [true, 'Bicycle description is required'],
         trim: true,
         min: 0,
-        default: 0
+        default: 1
     },
     status: {
         type: String,
