@@ -30,4 +30,13 @@ router.get(
     UserControllers.getAlluser,
 );
 
+
+// Update user route
+router.patch(
+    '/:userId',
+    auth(USER_ROLE.admin, USER_ROLE.customer),
+    validateRequest(UserValidation.UpdateUserValidationSchema),
+    UserControllers.updateUser,
+);
+
 export const UserRoutes = router;

@@ -86,7 +86,7 @@ userSchema.post('save', function (doc, next) {
 
 // Spasic data send function
 userSchema.statics.getPublicUserData = function (userId: string) {
-    return this.findById(userId).select('id name email isDeleted status role');
+    return this.findById(userId).select('id name email isDeleted status role address mobile');
 };
 
 // Existing ID
@@ -102,6 +102,12 @@ userSchema.statics.isPasswordMatched = async function (
 ) {
     return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
+
+
+userSchema.pre('find', function (next) {
+    this.find({ isDeleted: { $ne: true } });
+    next();
+});
 
 
 export const User = model<TUser, UserModel>('User', userSchema);

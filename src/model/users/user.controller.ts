@@ -49,8 +49,25 @@ const getAlluser = catchAsync(async (req, res) => {
 });
 
 
+// Update user
+const updateUser = catchAsync(async (req, res) => {
+    const { userId } = req.params;
+    console.log(userId);
+    
+    const result = await UserService.updateUserIntoDB(userId, req.body);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Bicycle is updated succesfully',
+        data: result,
+    });
+});
+
+
 export const UserControllers = {
     registerUser,
     loginUser,
-    getAlluser 
+    getAlluser,
+    updateUser
 }
