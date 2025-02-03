@@ -52,14 +52,28 @@ const getAlluser = catchAsync(async (req, res) => {
 // Update user
 const updateUser = catchAsync(async (req, res) => {
     const { userId } = req.params;
-    console.log(userId);
-    
+    // console.log(userId);
+
     const result = await UserService.updateUserIntoDB(userId, req.body);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
-        message: 'Bicycle is updated succesfully',
+        message: 'User is updated succesfully',
+        data: result,
+    });
+});
+
+
+// delete user
+const deleteUser = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const result = await UserService.deleteUserFromDB(id);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User is deleted succesfully',
         data: result,
     });
 });
@@ -69,5 +83,6 @@ export const UserControllers = {
     registerUser,
     loginUser,
     getAlluser,
-    updateUser
+    updateUser,
+    deleteUser
 }

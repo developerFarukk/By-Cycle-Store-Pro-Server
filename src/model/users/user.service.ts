@@ -112,11 +112,24 @@ const updateUserIntoDB = async (
     return result;
 };
 
+// Delete User
+const deleteUserFromDB = async (id: string) => {
+    const result = await User.findByIdAndUpdate(
+        id,
+        { isDeleted: true },
+        {
+            new: true,
+        },
+    );
+    return result;
+};
+
 
 
 export const UserService = {
     userRegisterDB,
     loginUserWithDB,
     getAllUserFromDB,
-    updateUserIntoDB
+    updateUserIntoDB,
+    deleteUserFromDB
 }
