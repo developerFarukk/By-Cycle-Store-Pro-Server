@@ -97,9 +97,26 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 };
 
 
+// Update single user
+const updateUserIntoDB = async (
+    id: string,
+    payload: Partial<TUser>,
+) => {
+    const result = await User.findOneAndUpdate(
+        { _id: id },
+        payload,
+        {
+            new: true,
+        },
+    );
+    return result;
+};
+
+
 
 export const UserService = {
     userRegisterDB,
     loginUserWithDB,
-    getAllUserFromDB
+    getAllUserFromDB,
+    updateUserIntoDB
 }

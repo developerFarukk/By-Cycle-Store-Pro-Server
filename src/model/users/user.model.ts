@@ -45,6 +45,19 @@ const userSchema = new Schema<TUser>(
             type: Boolean,
             default: false,
         },
+        address: {
+            type: String,
+            trim: true,
+            required: [true, 'User address is required'],
+            // maxlength: [20, 'User Name can not be more than 20 characters']
+        },
+        mobile: {
+            type: String,
+            trim: true,
+            required: [true, 'User Mobile Number is required'],
+            maxlength: [11, 'User mobil number can not be more than 11 characters'],
+            minlength: 11
+        },
     },
     {
         timestamps: true,

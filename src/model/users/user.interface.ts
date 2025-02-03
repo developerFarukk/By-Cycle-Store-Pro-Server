@@ -9,6 +9,8 @@ export interface TUser {
     password: string;
     role: 'admin' | 'customer';
     status: 'in-progress' | 'blocked';
+    mobile: string;
+    address: string;
     isDeleted: boolean;
 };
 
@@ -17,7 +19,7 @@ export interface UserModel extends Model<TUser> {
 
     isUserExistsByCustomId(email: string): Promise<TUser>;
 
-    getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'>>;
+    getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'| 'mobile'| 'address'>>;
 
     //instance methods for checking if passwords are matched
     isPasswordMatched(
