@@ -14,8 +14,8 @@ const createOrder = catchAsync(async (req, res) => {
     // console.log(req.user);
     
 
-    const result = await OrderService.createOrderIntoDB(req.body, user);
-    // console.log(result);
+    const result = await OrderService.createOrderIntoDB(req.body, user, req.ip!);
+    console.log(result);
 
 
     sendResponse(res, {
