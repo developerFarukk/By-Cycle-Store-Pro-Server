@@ -7,10 +7,15 @@ import Order from "./order.model";
 import httpStatus from "http-status";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { isValidStatusTransition, OrderSearchableFields } from "./order.constant";
+import { User } from "../users/user.model";
+import { JwtPayload } from "jsonwebtoken";
 
 
 // Create Order Function
-const createOrderIntoDB = async (payload: TOrder, userId: string) => {
+const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
+
+    const userId = user?.userId
+
 
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
@@ -39,7 +44,10 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
     bicycle.quantity -= payload.quantity;
     await bicycle.save();
 
-    // const user = await User.isUserExistsByCustomId(userEmail);
+    const userData = await User.isUserExistsByCustomId(user.userEmail);
+
+    console.log(userData.name);
+
 
     // const userId = user ? user.id : 0;
     // console.log(userId);
@@ -57,7 +65,23 @@ const createOrderIntoDB = async (payload: TOrder, userId: string) => {
     const order = await Order.create(orderData);
 
 
-    return order;
+    // payment integration
+    const shurjopayPayload = {
+        amount: totalPrice,
+        order_id: order._id,
+        currency: "BDT",
+        customer_name: userData.name,
+        customer_address: userData.address,
+        customer_email: userData.email,
+        customer_phone: userData.mobile,
+        customer_city: userData.address,
+        client_ip,
+    };
+
+    const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+
+    return null;
 };
 
 // get All Order

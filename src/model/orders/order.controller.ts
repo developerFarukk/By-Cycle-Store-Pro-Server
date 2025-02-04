@@ -8,10 +8,14 @@ import httpStatus from "http-status";
 // Creat Order Function
 const createOrder = catchAsync(async (req, res) => {
 
-    const userId = req.user?.userId
+    // const userId = req.user?.userId
+    const user = req.user
 
-    const result = await OrderService.createOrderIntoDB(req.body, userId);
-    console.log(result);
+    // console.log(req.user);
+    
+
+    const result = await OrderService.createOrderIntoDB(req.body, user);
+    // console.log(result);
 
 
     sendResponse(res, {
