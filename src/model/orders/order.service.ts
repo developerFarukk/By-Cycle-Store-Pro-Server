@@ -9,6 +9,7 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { isValidStatusTransition, OrderSearchableFields } from "./order.constant";
 import { User } from "../users/user.model";
 import { JwtPayload } from "jsonwebtoken";
+import { orderUtils } from "./order.utils";
 
 
 // Create Order Function
@@ -62,7 +63,7 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
         // paymentStatus: "Unpaid",
     };
 
-    const order = await Order.create(orderData);
+    let order = await Order.create(orderData);
 
 
     // payment integration
@@ -80,8 +81,17 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
 
     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
+    if (payment?.transactionStatus) {
+        order = await order.updateOne({
+            transaction: {
+                id: payment.sp_order_id,
+                transactionStatus: payment.transactionStatus,
+            },
+        });
+    }
 
-    return null;
+    return payment.checkout_url;
+    // return null;
 };
 
 // get All Order
