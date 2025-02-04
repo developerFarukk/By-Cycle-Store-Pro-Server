@@ -47,8 +47,6 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
 
     const userData = await User.isUserExistsByCustomId(user.userEmail);
 
-    console.log(userData.name);
-
 
     // const userId = user ? user.id : 0;
     // console.log(userId);
