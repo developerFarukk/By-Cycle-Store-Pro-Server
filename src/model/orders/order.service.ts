@@ -13,19 +13,96 @@ import { orderUtils } from "./order.utils";
 
 
 // Create Order Function
+// const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
+
+//     const userId = user?.userId
+
+
+//     // Find the bicycle
+//     const bicycle = await Bicycle.findById(payload.productId);
+
+//     // checking if the product is Blocked
+//     const isBlocked = bicycle?.isDeleted
+
+//     if (isBlocked) {
+//         throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Prodicts is deleted !');
+//     }
+
+//     // Checking Existing product
+//     if (!bicycle) {
+//         throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
+//     }
+
+//     // Check stock availability
+//     if (bicycle.quantity < payload.quantity) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
+//     }
+
+//     // Calculate the total price
+//     const totalPrice = bicycle.price * payload.quantity;
+
+//     //  Deduct the stock
+//     bicycle.quantity -= payload.quantity;
+//     await bicycle.save();
+
+//     const userData = await User.isUserExistsByCustomId(user.userEmail);
+
+
+//     // const userId = user ? user.id : 0;
+//     // console.log(userId);
+
+
+//     //  Create the order
+//     const orderData: TOrder = {
+//         ...payload,
+//         user: new Types.ObjectId(userId),
+//         totalPrice,
+//         // status: "Pending",
+//         // paymentStatus: "Unpaid",
+//     };
+
+//     let order = await Order.create(orderData);
+
+
+//     // payment integration
+//     const shurjopayPayload = {
+//         amount: totalPrice,
+//         order_id: order._id,
+//         currency: "BDT",
+//         customer_name: userData.name,
+//         customer_address: userData.address,
+//         customer_email: userData.email,
+//         customer_phone: userData.mobile,
+//         customer_city: userData.address,
+//         client_ip,
+//     };
+
+//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+//     if (payment?.transactionStatus) {
+//         order = await order.updateOne({
+//             transaction: {
+//                 id: payment.sp_order_id,
+//                 transactionStatus: payment.transactionStatus,
+//             },
+//         });
+//     }
+
+//     return payment.checkout_url;
+//     // return null;
+// };
+
 const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
-
-    const userId = user?.userId
-
+    const userId = user?.userId;
 
     // Find the bicycle
     const bicycle = await Bicycle.findById(payload.productId);
 
     // checking if the product is Blocked
-    const isBlocked = bicycle?.isDeleted
+    const isBlocked = bicycle?.isDeleted;
 
     if (isBlocked) {
-        throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Prodicts is deleted !');
+        throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Product is deleted!');
     }
 
     // Checking Existing product
@@ -41,30 +118,22 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
     // Calculate the total price
     const totalPrice = bicycle.price * payload.quantity;
 
-    //  Deduct the stock
+    // Deduct the stock
     bicycle.quantity -= payload.quantity;
     await bicycle.save();
 
     const userData = await User.isUserExistsByCustomId(user.userEmail);
 
-
-    // const userId = user ? user.id : 0;
-    // console.log(userId);
-
-
-    //  Create the order
+    // Create the order
     const orderData: TOrder = {
         ...payload,
         user: new Types.ObjectId(userId),
         totalPrice,
-        // status: "Pending",
-        // paymentStatus: "Unpaid",
     };
 
     let order = await Order.create(orderData);
 
-
-    // payment integration
+    // Payment integration
     const shurjopayPayload = {
         amount: totalPrice,
         order_id: order._id,
@@ -88,8 +157,42 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
         });
     }
 
-    return payment.checkout_url;
-    // return null;
+    return {
+        // orders: orderData,
+        paymentUrl: payment.checkout_url,
+    };
+};
+
+
+// veryfy pament
+const verifyPayment = async (order_id: string) => {
+    const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
+
+    if (verifiedPayment.length) {
+        await Order.findOneAndUpdate(
+            {
+                "transaction.id": order_id,
+            },
+            {
+                "transaction.bank_status": verifiedPayment[0].bank_status,
+                "transaction.sp_code": verifiedPayment[0].sp_code,
+                "transaction.sp_message": verifiedPayment[0].sp_message,
+                "transaction.transactionStatus": verifiedPayment[0].transaction_status,
+                "transaction.method": verifiedPayment[0].method,
+                "transaction.date_time": verifiedPayment[0].date_time,
+                status:
+                    verifiedPayment[0].bank_status == "Success"
+                        ? "Paid"
+                        : verifiedPayment[0].bank_status == "Failed"
+                            ? "Pending"
+                            : verifiedPayment[0].bank_status == "Cancel"
+                                ? "Cancelled"
+                                : "",
+            }
+        );
+    }
+
+    return verifiedPayment;
 };
 
 // get All Order
@@ -195,5 +298,6 @@ export const OrderService = {
     createOrderIntoDB,
     getAllOrderFromDB,
     deleteOrderFromDB,
-    updateOrderIntoDB
+    updateOrderIntoDB,
+    verifyPayment
 };
