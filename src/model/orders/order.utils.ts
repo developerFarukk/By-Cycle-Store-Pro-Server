@@ -42,6 +42,8 @@ const makePaymentAsync = async (paymentPayload: any): Promise<PaymentResponse> =
     //     (error) => console.log(error)
     // );
     // return paymentResult;
+
+    // anrazi .com 
 };
 
 const verifyPaymentAsync = ( order_id: string ): Promise<VerificationResponse[]> => {
