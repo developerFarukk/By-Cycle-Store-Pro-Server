@@ -10,12 +10,20 @@ import { OrderValidations } from './order.validation';
 const router = express.Router();
 
 
-// Create Bicycle Route
+// Create order Route
 router.post(
     '/create-order',
     auth(USER_ROLE.customer),
     validateRequest(OrderValidations.createOrderValidationSchema),
     OrderController.createOrder,
+);
+
+// verify order Route
+router.get(
+    '/verify',
+    auth(USER_ROLE.customer),
+    // validateRequest(OrderValidations.createOrderValidationSchema),
+    OrderController.verifyPayment,
 );
 
 // All order route

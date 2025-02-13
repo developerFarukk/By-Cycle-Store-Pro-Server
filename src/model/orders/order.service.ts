@@ -92,44 +92,228 @@ import { orderUtils } from "./order.utils";
 //     // return null;
 // };
 
-const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
+// const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
+//     const userId = user?.userId;
+
+//     // Find the bicycle
+//     const bicycle = await Bicycle.findById(payload.products?.productId);
+
+//     // checking if the product is Blocked
+//     const isBlocked = bicycle?.isDeleted;
+
+//     if (isBlocked) {
+//         throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Product is deleted!');
+//     }
+
+//     // Checking Existing product
+//     if (!bicycle) {
+//         throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
+//     }
+
+//     // Check stock availability
+//     if (bicycle.quantity < payload.quantity) {
+//         throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
+//     }
+
+//     // Calculate the total price
+//     const totalPrice = bicycle.price * payload.quantity;
+
+//     // Deduct the stock
+//     bicycle.quantity -= payload.quantity;
+//     await bicycle.save();
+
+//     const userData = await User.isUserExistsByCustomId(user.userEmail);
+
+//     // Create the order
+//     const orderData: TOrder = {
+//         ...payload,
+//         user: new Types.ObjectId(userId),
+//         totalPrice,
+//     };
+
+//     let order = await Order.create(orderData);
+
+//     // Payment integration
+//     const shurjopayPayload = {
+//         amount: totalPrice,
+//         order_id: order._id,
+//         currency: "BDT",
+//         customer_name: userData.name,
+//         customer_address: userData.address,
+//         customer_email: userData.email,
+//         customer_phone: userData.mobile,
+//         customer_city: userData.address,
+//         client_ip,
+//     };
+
+//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+//     if (payment?.transactionStatus) {
+//         order = await order.updateOne({
+//             transaction: {
+//                 id: payment.sp_order_id,
+//                 transactionStatus: payment.transactionStatus,
+//             },
+//         });
+//     }
+
+//     return {
+//         // orders: orderData,
+//         paymentUrl: payment.checkout_url,
+//     };
+// };
+
+// const createOrderIntoDB = async (payload: { products: { product: string; quantity: number }[] }, user: JwtPayload, client_ip: string) => {
+//     const userId = user?.userId;
+
+//     // Validate user existence
+//     const userData = await User.isUserExistsByCustomId(user.userEmail);
+//     if (!userData) {
+//         throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+//     }
+
+
+//     // Validate payload
+//     if (!payload?.products || payload?.products?.length === 0) {
+//         throw new AppError(httpStatus.BAD_REQUEST, 'No products in the order');
+//     }
+
+//     // Process each product in the order
+//     let totalPrice = 0;
+//     for (const product of payload.products) {
+//         const bicycle = await Bicycle.findById(product.product); // Use `product` instead of `productId`
+//         if (!bicycle) {
+//             throw new AppError(httpStatus.NOT_FOUND, `Bicycle with ID ${product.product} not found`);
+//         }
+
+//         if (bicycle.isDeleted) {
+//             throw new AppError(httpStatus.FORBIDDEN, `Bicycle with ID ${product.product} is deleted`);
+//         }
+
+//         if (bicycle.quantity < product.quantity) {
+//             throw new AppError(httpStatus.BAD_REQUEST, `Insufficient stock for bicycle with ID ${product.product}`);
+//         }
+
+//         // Deduct the stock
+//         bicycle.quantity -= product.quantity;
+//         await bicycle.save();
+
+//         // Calculate total price
+//         totalPrice += bicycle.price * product.quantity;
+//     }
+
+//     // Create the order
+//     const orderData: TOrder = {
+//         ...payload,
+//         user: new Types.ObjectId(userId),
+//         totalPrice,
+//         status: 'Pending', // Default status
+//     };
+
+//     let order = await Order.create(orderData);
+
+//     // Payment integration
+//     const shurjopayPayload = {
+//         amount: totalPrice,
+//         order_id: order._id,
+//         currency: "BDT",
+//         customer_name: userData.name,
+//         customer_address: userData.address,
+//         customer_email: userData.email,
+//         customer_phone: userData.mobile,
+//         customer_city: userData.address,
+//         client_ip,
+//     };
+
+//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+//     if (payment?.transactionStatus) {
+//         const updatedOrder = await Order.findByIdAndUpdate(
+//             order._id,
+//             {
+//                 transaction: {
+//                     id: payment.sp_order_id,
+//                     transactionStatus: payment.transactionStatus,
+//                 },
+//             },
+//             { new: true }
+//         );
+
+//         if (!updatedOrder) {
+//             throw new AppError(httpStatus.NOT_FOUND, 'Order not found after update');
+//         }
+
+//         order = updatedOrder;
+//     }
+
+//     return {
+//         order,
+//         orderData,
+//         paymentUrl: payment.checkout_url,
+//     };
+// };
+
+const createOrderIntoDB = async (
+    payload: { products: { product: string; quantity: number }[] },
+    user: JwtPayload,
+    client_ip: string
+) => {
     const userId = user?.userId;
 
-    // Find the bicycle
-    const bicycle = await Bicycle.findById(payload.productId);
-
-    // checking if the product is Blocked
-    const isBlocked = bicycle?.isDeleted;
-
-    if (isBlocked) {
-        throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Product is deleted!');
-    }
-
-    // Checking Existing product
-    if (!bicycle) {
-        throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
-    }
-
-    // Check stock availability
-    if (bicycle.quantity < payload.quantity) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
-    }
-
-    // Calculate the total price
-    const totalPrice = bicycle.price * payload.quantity;
-
-    // Deduct the stock
-    bicycle.quantity -= payload.quantity;
-    await bicycle.save();
-
+    // Validate user existence
     const userData = await User.isUserExistsByCustomId(user.userEmail);
+    if (!userData) {
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    // Validate payload
+    if (!payload?.products || payload?.products?.length === 0) {
+        throw new AppError(httpStatus.BAD_REQUEST, 'No products in the order');
+    }
+
+    // Process each product in the order
+    let totalPrice = 0;
+    const productsWithObjectId = payload.products.map((product) => ({
+        product: new Types.ObjectId(product.product), // Convert `product` string to ObjectId
+        quantity: product.quantity,
+    }));
+
+    for (const product of productsWithObjectId) {
+        const bicycle = await Bicycle.findById(product.product);
+        if (!bicycle) {
+            throw new AppError(httpStatus.NOT_FOUND, `Bicycle with ID ${product.product} not found`);
+        }
+
+        if (bicycle.isDeleted) {
+            throw new AppError(httpStatus.FORBIDDEN, `Bicycle with ID ${product.product} is deleted`);
+        }
+
+        if (bicycle.quantity < product.quantity) {
+            throw new AppError(httpStatus.BAD_REQUEST, `Insufficient stock for bicycle with ID ${product.product}`);
+        }
+
+        // Deduct the stock
+        bicycle.quantity -= product.quantity;
+        await bicycle.save();
+
+        // Calculate total price
+        totalPrice += bicycle.price * product.quantity;
+    }
 
     // Create the order
-    const orderData: TOrder = {
-        ...payload,
+    // const orderData: TOrder = {
+    //     products: productsWithObjectId, // Use the converted products array
+    //     user: new Types.ObjectId(userId),
+    //     totalPrice,
+    //     status: 'Pending', // Default status
+    // };
+
+    const orderData = {
+        products: productsWithObjectId,
         user: new Types.ObjectId(userId),
         totalPrice,
-    };
+        status: 'Pending',
+    } as TOrder;
 
     let order = await Order.create(orderData);
 
@@ -149,16 +333,27 @@ const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: s
     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
     if (payment?.transactionStatus) {
-        order = await order.updateOne({
-            transaction: {
-                id: payment.sp_order_id,
-                transactionStatus: payment.transactionStatus,
+        const updatedOrder = await Order.findByIdAndUpdate(
+            order._id,
+            {
+                transaction: {
+                    id: payment.sp_order_id,
+                    transactionStatus: payment.transactionStatus,
+                },
             },
-        });
+            { new: true }
+        );
+
+        if (!updatedOrder) {
+            throw new AppError(httpStatus.NOT_FOUND, 'Order not found after update');
+        }
+
+        order = updatedOrder;
     }
 
     return {
-        // orders: orderData,
+        order,
+        payment,
         paymentUrl: payment.checkout_url,
     };
 };

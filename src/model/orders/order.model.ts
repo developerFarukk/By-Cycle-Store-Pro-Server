@@ -12,7 +12,7 @@ const orderSchema = new Schema<TOrder>({
 
     products: [
         {
-            productId: {
+            product: {
                 type: Schema.Types.ObjectId,
                 ref: "Bicycle",
                 required: [true, 'Bicycle id is required']
@@ -22,8 +22,15 @@ const orderSchema = new Schema<TOrder>({
                 required: true,
                 min: [1, "Quantity must be at least 1"],
             },
+            _id: false
         },
+        // { _id: false }
     ],
+    // totalQuantity: {
+    //     type: Number,
+    //     required: true,
+    //     min: [1, "Quantity must be at least 1"],
+    // },
 
     totalPrice: {
         type: Number,

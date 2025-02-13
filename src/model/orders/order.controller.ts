@@ -15,7 +15,7 @@ const createOrder = catchAsync(async (req, res) => {
     
 
     const result = await OrderService.createOrderIntoDB(req.body, user, req.ip!);
-    console.log(result);
+    // console.log(result);
 
 
     sendResponse(res, {
@@ -23,6 +23,24 @@ const createOrder = catchAsync(async (req, res) => {
         success: true,
         message: 'Order is created succesfully',
         data: result,
+    });
+});
+
+// verify Order Function
+const verifyPayment = catchAsync(async (req, res) => {
+
+    const order = await OrderService.verifyPayment(req.query.order_id as string);;
+    
+
+    // const result = await OrderService.createOrderIntoDB(req.body, user, req.ip!);
+    // console.log(result);
+
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Order verify succesfully',
+        data: order,
     });
 });
 
@@ -81,5 +99,6 @@ export const OrderController = {
     createOrder,
     getAllOrder,
     deleteOrder,
-    updateOrder
+    updateOrder,
+    verifyPayment
 };

@@ -43,9 +43,6 @@ const makePaymentAsync = async (paymentPayload: any): Promise<PaymentResponse> =
     // );
     // return paymentResult;
 
-    // anrazi .com GDFTFGDGHFGHF jhbdchvbjhbcbdshbc xjbc 
-    // anrazi .com GDFTFGDGHFGHF hgf236vsd673vd
-    // anrazi .com GDFTFGDGHFGHF ghfgvhfgh565436 ghf6v
 };
 
 const verifyPaymentAsync = ( order_id: string ): Promise<VerificationResponse[]> => {
