@@ -352,8 +352,8 @@ const createOrderIntoDB = async (
     }
 
     return {
-        order,
-        payment,
+        // order,
+        // payment,
         paymentUrl: payment.checkout_url,
     };
 };

@@ -22,14 +22,14 @@ router.post(
 
 // All Bicycle data get route
 router.get('/',
-    auth(USER_ROLE.admin, USER_ROLE.customer),
+    // auth(USER_ROLE.admin, USER_ROLE.customer),
     BicycleControllers.getAllBicycle
 );
 
 
 // Single Bicycle  Data get Route
 router.get('/:id',
-    auth(USER_ROLE.admin, USER_ROLE.customer), 
+    // auth(USER_ROLE.admin, USER_ROLE.customer), 
     BicycleControllers.getSingleBicycle
 );
 
