@@ -9,30 +9,50 @@ const orderSchema = new Schema<TOrder>({
         ref: "User",
         required: [true, 'User id is required']
     },
-    productId: {
-        type: Schema.Types.ObjectId,
-        ref: "Bicycle",
-        required: [true, 'Bicycle id is required']
-    },
-    quantity: {
-        type: Number,
-        required: true,
-        min: [1, "Quantity must be at least 1"],
-    },
+
+    products: [
+        {
+            productId: {
+                type: Schema.Types.ObjectId,
+                ref: "Bicycle",
+                required: [true, 'Bicycle id is required']
+            },
+            quantity: {
+                type: Number,
+                required: true,
+                min: [1, "Quantity must be at least 1"],
+            },
+        },
+    ],
+
     totalPrice: {
         type: Number,
         required: [true, 'Total price is required']
     },
     status: {
         type: String,
-        enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
-        default: 'Pending',
+        enum: ["Pending", "Paid", "Shipped", "Completed", "Cancelled"],
+        default: "Pending",
     },
-    paymentStatus: {
-        type: String,
-        enum: ['Unpaid', 'Paid'],
-        default: 'Unpaid',
+    transaction: {
+        id: String,
+        transactionStatus: String,
+        bank_status: String,
+        sp_code: String,
+        sp_message: String,
+        method: String,
+        date_time: String,
     },
+    // status: {
+    //     type: String,
+    //     enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
+    //     default: 'Pending',
+    // },
+    // paymentStatus: {
+    //     type: String,
+    //     enum: ['Unpaid', 'Paid'],
+    //     default: 'Unpaid',
+    // },
 },
     {
         timestamps: true,
