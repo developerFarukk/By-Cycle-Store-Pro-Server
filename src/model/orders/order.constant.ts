@@ -1,6 +1,6 @@
 
 
-export const OrderSearchableFields = ['user', 'productId', '_id', 'paymentStatus', 'status'];
+export const OrderSearchableFields = ['user', 'products', '_id',  'status', "totalPrice"];
 
 
 const statusOrder = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];

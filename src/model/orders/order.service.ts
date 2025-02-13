@@ -391,26 +391,71 @@ const verifyPayment = async (order_id: string) => {
 };
 
 // get All Order
-const getAllOrderFromDB = async (query: Record<string, unknown>) => {
+const getAllOrderFromDB = async (
+    // query: Record<string, unknown>
+) => {
     // console.log(query);
 
-    const orderQuery = new QueryBuilder(Order.find().populate('user').populate('productId'),
-        query,
-    )
-        .search(OrderSearchableFields)
-        .filter()
-        .sort()
-        .paginate()
-        .fields();
+    const result = await Order.find().populate("user")
+        // .populate({
+        //     path: "products.product", 
+        //     model: "Bicycle",
+        // });
+    
+    // console.log("extra",data);
 
-    const meta = await orderQuery.countTotal();
-    const result = await orderQuery.modelQuery;
+
+    // const orderQuery = new QueryBuilder(Order.find().populate("user"),
+    //     query,
+    // )
+    //     .search(OrderSearchableFields)
+    //     .filter()
+    //     .sort()
+    //     .paginate()
+    //     .fields();
+
+    // const meta = await orderQuery.countTotal();
+    // const result = await orderQuery.modelQuery;
+    // console.log("main",result);
+
 
     return {
-        meta,
+        // meta,
         result,
     };
 };
+
+// const getAllOrderFromDB = async (query: Record<string, unknown>) => {
+//     // Build the query using QueryBuilder
+//     const orderQuery = new QueryBuilder(Order.find(), query)
+//         .search(OrderSearchableFields)
+//         .filter()
+//         .sort()
+//         .paginate()
+//         .fields();
+
+//     // Populate the 'user' and 'products.product' fields
+//     orderQuery.modelQuery = orderQuery.modelQuery
+//         .populate("user") // Populate the 'user' field
+//         .populate({
+//             path: "products.product", // Populate the 'product' field inside the 'products' array
+//             model: "Bicycle", // Reference the 'Bicycle' model
+//         });
+
+//     // Execute the query to get the total count (meta)
+//     const meta = await orderQuery.countTotal();
+
+//     // Execute the query to get the result
+//     const result = await orderQuery.modelQuery;
+
+//     // Log the result for debugging
+//     console.log("Populated Result:", result);
+
+//     return {
+//         meta,
+//         result,
+//     };
+// };
 
 
 // Delete Order Data
