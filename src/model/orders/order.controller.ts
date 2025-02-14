@@ -11,12 +11,8 @@ const createOrder = catchAsync(async (req, res) => {
     // const userId = req.user?.userId
     const user = req.user
 
-    // console.log(req.user);
-    
-
     const result = await OrderService.createOrderIntoDB(req.body, user, req.ip!);
     // console.log(result);
-
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -48,8 +44,8 @@ const verifyPayment = catchAsync(async (req, res) => {
 // get All order 
 const getAllOrder = catchAsync(async (req, res) => {
 
-    // const result = await OrderService.getAllOrderFromDB(req.query);
-    const result = await OrderService.getAllOrderFromDB();
+    const result = await OrderService.getAllOrderFromDB(req.query);
+    // const result = await OrderService.getAllOrderFromDB();
     // console.log(result);
 
     sendResponse(res, {

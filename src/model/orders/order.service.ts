@@ -5,254 +5,14 @@ import { Bicycle } from "../bicycles/bicycle.model";
 import { TOrder } from "./order.interface";
 import Order from "./order.model";
 import httpStatus from "http-status";
-import QueryBuilder from "../../builder/QueryBuilder";
 import { isValidStatusTransition, OrderSearchableFields } from "./order.constant";
 import { User } from "../users/user.model";
 import { JwtPayload } from "jsonwebtoken";
 import { orderUtils } from "./order.utils";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 
-// Create Order Function
-// const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
-
-//     const userId = user?.userId
-
-
-//     // Find the bicycle
-//     const bicycle = await Bicycle.findById(payload.productId);
-
-//     // checking if the product is Blocked
-//     const isBlocked = bicycle?.isDeleted
-
-//     if (isBlocked) {
-//         throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Prodicts is deleted !');
-//     }
-
-//     // Checking Existing product
-//     if (!bicycle) {
-//         throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
-//     }
-
-//     // Check stock availability
-//     if (bicycle.quantity < payload.quantity) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
-//     }
-
-//     // Calculate the total price
-//     const totalPrice = bicycle.price * payload.quantity;
-
-//     //  Deduct the stock
-//     bicycle.quantity -= payload.quantity;
-//     await bicycle.save();
-
-//     const userData = await User.isUserExistsByCustomId(user.userEmail);
-
-
-//     // const userId = user ? user.id : 0;
-//     // console.log(userId);
-
-
-//     //  Create the order
-//     const orderData: TOrder = {
-//         ...payload,
-//         user: new Types.ObjectId(userId),
-//         totalPrice,
-//         // status: "Pending",
-//         // paymentStatus: "Unpaid",
-//     };
-
-//     let order = await Order.create(orderData);
-
-
-//     // payment integration
-//     const shurjopayPayload = {
-//         amount: totalPrice,
-//         order_id: order._id,
-//         currency: "BDT",
-//         customer_name: userData.name,
-//         customer_address: userData.address,
-//         customer_email: userData.email,
-//         customer_phone: userData.mobile,
-//         customer_city: userData.address,
-//         client_ip,
-//     };
-
-//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
-
-//     if (payment?.transactionStatus) {
-//         order = await order.updateOne({
-//             transaction: {
-//                 id: payment.sp_order_id,
-//                 transactionStatus: payment.transactionStatus,
-//             },
-//         });
-//     }
-
-//     return payment.checkout_url;
-//     // return null;
-// };
-
-// const createOrderIntoDB = async (payload: TOrder, user: JwtPayload, client_ip: string) => {
-//     const userId = user?.userId;
-
-//     // Find the bicycle
-//     const bicycle = await Bicycle.findById(payload.products?.productId);
-
-//     // checking if the product is Blocked
-//     const isBlocked = bicycle?.isDeleted;
-
-//     if (isBlocked) {
-//         throw new AppError(httpStatus.FORBIDDEN, 'This Bicycle Product is deleted!');
-//     }
-
-//     // Checking Existing product
-//     if (!bicycle) {
-//         throw new AppError(httpStatus.NOT_FOUND, "Bicycle not found");
-//     }
-
-//     // Check stock availability
-//     if (bicycle.quantity < payload.quantity) {
-//         throw new AppError(httpStatus.BAD_REQUEST, "Insufficient stock available");
-//     }
-
-//     // Calculate the total price
-//     const totalPrice = bicycle.price * payload.quantity;
-
-//     // Deduct the stock
-//     bicycle.quantity -= payload.quantity;
-//     await bicycle.save();
-
-//     const userData = await User.isUserExistsByCustomId(user.userEmail);
-
-//     // Create the order
-//     const orderData: TOrder = {
-//         ...payload,
-//         user: new Types.ObjectId(userId),
-//         totalPrice,
-//     };
-
-//     let order = await Order.create(orderData);
-
-//     // Payment integration
-//     const shurjopayPayload = {
-//         amount: totalPrice,
-//         order_id: order._id,
-//         currency: "BDT",
-//         customer_name: userData.name,
-//         customer_address: userData.address,
-//         customer_email: userData.email,
-//         customer_phone: userData.mobile,
-//         customer_city: userData.address,
-//         client_ip,
-//     };
-
-//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
-
-//     if (payment?.transactionStatus) {
-//         order = await order.updateOne({
-//             transaction: {
-//                 id: payment.sp_order_id,
-//                 transactionStatus: payment.transactionStatus,
-//             },
-//         });
-//     }
-
-//     return {
-//         // orders: orderData,
-//         paymentUrl: payment.checkout_url,
-//     };
-// };
-
-// const createOrderIntoDB = async (payload: { products: { product: string; quantity: number }[] }, user: JwtPayload, client_ip: string) => {
-//     const userId = user?.userId;
-
-//     // Validate user existence
-//     const userData = await User.isUserExistsByCustomId(user.userEmail);
-//     if (!userData) {
-//         throw new AppError(httpStatus.NOT_FOUND, 'User not found');
-//     }
-
-
-//     // Validate payload
-//     if (!payload?.products || payload?.products?.length === 0) {
-//         throw new AppError(httpStatus.BAD_REQUEST, 'No products in the order');
-//     }
-
-//     // Process each product in the order
-//     let totalPrice = 0;
-//     for (const product of payload.products) {
-//         const bicycle = await Bicycle.findById(product.product); // Use `product` instead of `productId`
-//         if (!bicycle) {
-//             throw new AppError(httpStatus.NOT_FOUND, `Bicycle with ID ${product.product} not found`);
-//         }
-
-//         if (bicycle.isDeleted) {
-//             throw new AppError(httpStatus.FORBIDDEN, `Bicycle with ID ${product.product} is deleted`);
-//         }
-
-//         if (bicycle.quantity < product.quantity) {
-//             throw new AppError(httpStatus.BAD_REQUEST, `Insufficient stock for bicycle with ID ${product.product}`);
-//         }
-
-//         // Deduct the stock
-//         bicycle.quantity -= product.quantity;
-//         await bicycle.save();
-
-//         // Calculate total price
-//         totalPrice += bicycle.price * product.quantity;
-//     }
-
-//     // Create the order
-//     const orderData: TOrder = {
-//         ...payload,
-//         user: new Types.ObjectId(userId),
-//         totalPrice,
-//         status: 'Pending', // Default status
-//     };
-
-//     let order = await Order.create(orderData);
-
-//     // Payment integration
-//     const shurjopayPayload = {
-//         amount: totalPrice,
-//         order_id: order._id,
-//         currency: "BDT",
-//         customer_name: userData.name,
-//         customer_address: userData.address,
-//         customer_email: userData.email,
-//         customer_phone: userData.mobile,
-//         customer_city: userData.address,
-//         client_ip,
-//     };
-
-//     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
-
-//     if (payment?.transactionStatus) {
-//         const updatedOrder = await Order.findByIdAndUpdate(
-//             order._id,
-//             {
-//                 transaction: {
-//                     id: payment.sp_order_id,
-//                     transactionStatus: payment.transactionStatus,
-//                 },
-//             },
-//             { new: true }
-//         );
-
-//         if (!updatedOrder) {
-//             throw new AppError(httpStatus.NOT_FOUND, 'Order not found after update');
-//         }
-
-//         order = updatedOrder;
-//     }
-
-//     return {
-//         order,
-//         orderData,
-//         paymentUrl: payment.checkout_url,
-//     };
-// };
-
+// Create Order 
 const createOrderIntoDB = async (
     payload: { products: { product: string; quantity: number }[] },
     user: JwtPayload,
@@ -391,71 +151,32 @@ const verifyPayment = async (order_id: string) => {
 };
 
 // get All Order
-const getAllOrderFromDB = async (
-    // query: Record<string, unknown>
-) => {
-    // console.log(query);
+const getAllOrderFromDB = async (query: Record<string, unknown>) => {
 
-    const result = await Order.find().populate("user")
-        // .populate({
-        //     path: "products.product", 
-        //     model: "Bicycle",
-        // });
-    
-    // console.log("extra",data);
+    const orderQuery = new QueryBuilder(Order.find()
+        .populate("user")
+        .populate({
+            path: "products",
+            populate: {
+                path: 'product',
+            },
+        }),
+        query,
+    )
+        .search(OrderSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
 
-
-    // const orderQuery = new QueryBuilder(Order.find().populate("user"),
-    //     query,
-    // )
-    //     .search(OrderSearchableFields)
-    //     .filter()
-    //     .sort()
-    //     .paginate()
-    //     .fields();
-
-    // const meta = await orderQuery.countTotal();
-    // const result = await orderQuery.modelQuery;
-    // console.log("main",result);
-
+    const meta = await orderQuery.countTotal();
+    const result = await orderQuery.modelQuery;
 
     return {
-        // meta,
+        meta,
         result,
     };
 };
-
-// const getAllOrderFromDB = async (query: Record<string, unknown>) => {
-//     // Build the query using QueryBuilder
-//     const orderQuery = new QueryBuilder(Order.find(), query)
-//         .search(OrderSearchableFields)
-//         .filter()
-//         .sort()
-//         .paginate()
-//         .fields();
-
-//     // Populate the 'user' and 'products.product' fields
-//     orderQuery.modelQuery = orderQuery.modelQuery
-//         .populate("user") // Populate the 'user' field
-//         .populate({
-//             path: "products.product", // Populate the 'product' field inside the 'products' array
-//             model: "Bicycle", // Reference the 'Bicycle' model
-//         });
-
-//     // Execute the query to get the total count (meta)
-//     const meta = await orderQuery.countTotal();
-
-//     // Execute the query to get the result
-//     const result = await orderQuery.modelQuery;
-
-//     // Log the result for debugging
-//     console.log("Populated Result:", result);
-
-//     return {
-//         meta,
-//         result,
-//     };
-// };
 
 
 // Delete Order Data
