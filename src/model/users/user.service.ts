@@ -97,6 +97,15 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 };
 
 
+// Get Me user
+const getMeUserFromDB = async (userEmail: string) => {
+    
+    const user = await User.findOne({ email: userEmail })
+
+    return user
+};
+
+
 // Update single user
 const updateUserIntoDB = async (
     id: string,
@@ -111,6 +120,7 @@ const updateUserIntoDB = async (
     );
     return result;
 };
+
 
 // Delete User
 const deleteUserFromDB = async (id: string) => {
@@ -131,5 +141,6 @@ export const UserService = {
     loginUserWithDB,
     getAllUserFromDB,
     updateUserIntoDB,
-    deleteUserFromDB
+    deleteUserFromDB,
+    getMeUserFromDB
 }

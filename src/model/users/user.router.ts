@@ -30,6 +30,13 @@ router.get(
     UserControllers.getAlluser,
 );
 
+// get All user route
+router.get(
+    '/me',
+    auth( USER_ROLE.customer),
+    UserControllers.getMeuser,
+);
+
 
 // Update user route
 router.patch(
@@ -39,7 +46,7 @@ router.patch(
     UserControllers.updateUser,
 );
 
-// Update user route
+// Delete user route
 router.delete(
     '/:id',
     auth(USER_ROLE.admin),

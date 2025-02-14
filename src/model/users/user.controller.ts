@@ -48,6 +48,22 @@ const getAlluser = catchAsync(async (req, res) => {
     });
 });
 
+// get All User
+const getMeuser = catchAsync(async (req, res) => {
+
+    const userEmail = req.user?.userEmail
+
+    const result = await UserService.getMeUserFromDB(userEmail);
+    // console.log(result);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User get successfully',
+        data: result
+    });
+});
+
 
 // Update user
 const updateUser = catchAsync(async (req, res) => {
@@ -84,5 +100,6 @@ export const UserControllers = {
     loginUser,
     getAlluser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getMeuser
 }

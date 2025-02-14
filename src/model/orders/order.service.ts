@@ -178,14 +178,14 @@ const getMeOrderFromDB = async (query: Record<string, unknown>, userEmail: strin
     const orders = await Order.find()
         .populate({
             path: "user",
-            match: { email: userEmail }, 
+            match: { email: userEmail },
         })
         .populate({
             path: "products",
             populate: {
-                path: 'product',
+                path: 'Bicycle',
             },
-        });
+        }),
 
     const filteredOrders = orders.filter(order => order.user !== null);
 
