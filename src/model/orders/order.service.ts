@@ -34,7 +34,7 @@ const createOrderIntoDB = async (
     // Process each product in the order
     let totalPrice = 0;
     const productsWithObjectId = payload.products.map((product) => ({
-        product: new Types.ObjectId(product.product), // Convert `product` string to ObjectId
+        product: new Types.ObjectId(product.product),
         quantity: product.quantity,
     }));
 
@@ -60,13 +60,6 @@ const createOrderIntoDB = async (
         totalPrice += bicycle.price * product.quantity;
     }
 
-    // Create the order
-    // const orderData: TOrder = {
-    //     products: productsWithObjectId, // Use the converted products array
-    //     user: new Types.ObjectId(userId),
-    //     totalPrice,
-    //     status: 'Pending', // Default status
-    // };
 
     const orderData = {
         products: productsWithObjectId,
@@ -83,12 +76,13 @@ const createOrderIntoDB = async (
         order_id: order._id,
         currency: "BDT",
         customer_name: userData.name,
-        customer_address: userData.address,
+        customer_address: userData.address || "Sylhet",
         customer_email: userData.email,
-        customer_phone: userData.mobile,
-        customer_city: userData.address,
+        customer_phone: userData.mobile || "01917540405",
+        customer_city: userData.address || "block 4, ck goush road, Sylhet",
         client_ip,
     };
+
 
     const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
 
@@ -117,7 +111,6 @@ const createOrderIntoDB = async (
         paymentUrl: payment.checkout_url,
     };
 };
-
 
 // veryfy pament
 const verifyPayment = async (order_id: string) => {
@@ -179,6 +172,40 @@ const getAllOrderFromDB = async (query: Record<string, unknown>) => {
 };
 
 
+// Get Me Order Data
+const getMeOrderFromDB = async (query: Record<string, unknown>, userEmail: string) => {
+
+    const orders = await Order.find()
+        .populate({
+            path: "user",
+            match: { email: userEmail }, 
+        })
+        .populate({
+            path: "products",
+            populate: {
+                path: 'product',
+            },
+        });
+
+    const filteredOrders = orders.filter(order => order.user !== null);
+
+    const orderQuery = new QueryBuilder(Order.find({ _id: { $in: filteredOrders.map(order => order._id) } }), query)
+        .search(OrderSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+
+    const meta = await orderQuery.countTotal();
+    const result = await orderQuery.modelQuery;
+
+    return {
+        meta,
+        result,
+    };
+};
+
+
 // Delete Order Data
 const deleteOrderFromDB = async (id: string) => {
 
@@ -192,7 +219,6 @@ const deleteOrderFromDB = async (id: string) => {
     const result = Order.findByIdAndDelete(id)
     return result;
 };
-
 
 
 // Update Order
@@ -213,7 +239,7 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
         }
     }
 
-    
+
     if (payload.products) {
         for (const updatedProduct of payload.products) {
             // Find the corresponding product in the order
@@ -239,7 +265,7 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
 
             // Update the bicycle stock quantity
             await Bicycle.findByIdAndUpdate(
-                bicycle.id, 
+                bicycle.id,
                 { $inc: { quantity: -quantityDifference } },
                 { new: true }
             );
@@ -265,7 +291,7 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
     // Update the order
     const result = await Order.findOneAndUpdate(
         { _id: id },
-        { ...payload, products: order.products }, 
+        { ...payload, products: order.products },
         { new: true }
     );
 
@@ -278,5 +304,6 @@ export const OrderService = {
     getAllOrderFromDB,
     deleteOrderFromDB,
     updateOrderIntoDB,
-    verifyPayment
+    verifyPayment,
+    getMeOrderFromDB
 };

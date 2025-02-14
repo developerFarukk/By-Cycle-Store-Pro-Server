@@ -33,6 +33,13 @@ router.get(
     OrderController.getAllOrder,
 );
 
+// All order route
+router.get(
+    '/me',
+    auth( USER_ROLE.customer),
+    OrderController.getMeOrder,
+);
+
 // Delete Order Route
 router.delete('/:id',
     auth(USER_ROLE.admin, USER_ROLE.customer),

@@ -26,7 +26,7 @@ const createOrder = catchAsync(async (req, res) => {
 const verifyPayment = catchAsync(async (req, res) => {
 
     const order = await OrderService.verifyPayment(req.query.order_id as string);;
-    
+
 
     // const result = await OrderService.createOrderIntoDB(req.body, user, req.ip!);
     // console.log(result);
@@ -46,6 +46,25 @@ const getAllOrder = catchAsync(async (req, res) => {
 
     const result = await OrderService.getAllOrderFromDB(req.query);
     // const result = await OrderService.getAllOrderFromDB();
+    // console.log(result);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'All Order get successfully',
+        // meta: result?.meta,
+        // data: result?.result,
+        data: result
+    });
+});
+
+// get me order 
+const getMeOrder = catchAsync(async (req, res) => {
+
+    const userEmail = req.user?.userEmail
+    // console.log(user);
+    
+    const result = await OrderService.getMeOrderFromDB(req.query, userEmail);
     // console.log(result);
 
     sendResponse(res, {
@@ -78,11 +97,11 @@ const deleteOrder = catchAsync(async (req, res) => {
 const updateOrder = catchAsync(async (req, res) => {
     const { orderId } = req.params;
     // console.log(orderId);
-    
+
     const result = await OrderService.updateOrderIntoDB(orderId, req.body);
 
     // console.log(result);
-    
+
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -97,5 +116,6 @@ export const OrderController = {
     getAllOrder,
     deleteOrder,
     updateOrder,
-    verifyPayment
+    verifyPayment,
+    getMeOrder
 };

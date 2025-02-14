@@ -3,7 +3,7 @@
 export const OrderSearchableFields = ['user', 'products', '_id',  'status', "totalPrice"];
 
 
-const statusOrder = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+const statusOrder = ["Pending", "Paid", "Shipped", "Completed", "Cancelled"];
 
 export const isValidStatusTransition = (currentStatus: string, newStatus: string): boolean => {
     const currentIndex = statusOrder.indexOf(currentStatus);
