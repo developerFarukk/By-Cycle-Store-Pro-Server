@@ -12,6 +12,7 @@ class QueryBuilder<T> {
         this.query = query;
     }
 
+    // Search functionality
     search(searchableFields: string[]) {
         const searchTerm = this?.query?.searchTerm;
         if (searchTerm) {
@@ -28,19 +29,24 @@ class QueryBuilder<T> {
         return this;
     }
 
+    // Filter functionality (excludes deleted items by default)
     filter() {
-        const queryObj = { ...this.query }; // copy
+        const queryObj = { ...this.query }; // copy the query object
 
-        // Filtering
+        // Exclude fields that are not part of the document schema
         const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-
         excludeFields.forEach((el) => delete queryObj[el]);
 
-        this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+        // Add a default filter to exclude deleted items
+        this.modelQuery = this.modelQuery.find({
+            ...queryObj,
+            isDeleted: { $ne: true },
+        } as FilterQuery<T>);
 
         return this;
     }
 
+    // Sort functionality
     sort() {
         const sort =
             (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
@@ -49,6 +55,7 @@ class QueryBuilder<T> {
         return this;
     }
 
+    // Pagination functionality
     paginate() {
         const page = Number(this?.query?.page) || 1;
         const limit = Number(this?.query?.limit) || 6;
@@ -59,6 +66,7 @@ class QueryBuilder<T> {
         return this;
     }
 
+    // Field selection functionality
     fields() {
         const fields =
             (this?.query?.fields as string)?.split(',')?.join(' ') || '-__v';
@@ -66,9 +74,14 @@ class QueryBuilder<T> {
         this.modelQuery = this.modelQuery.select(fields);
         return this;
     }
+
+    // Count total documents (excluding deleted items)
     async countTotal() {
         const totalQueries = this.modelQuery.getFilter();
-        const total = await this.modelQuery.model.countDocuments(totalQueries);
+        const total = await this.modelQuery.model.countDocuments({
+            ...totalQueries,
+            isDeleted: { $ne: true }, // Exclude deleted items
+        });
         const page = Number(this?.query?.page) || 1;
         const limit = Number(this?.query?.limit) || 6;
         const totalPage = Math.ceil(total / limit);
