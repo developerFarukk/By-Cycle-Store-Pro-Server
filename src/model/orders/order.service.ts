@@ -194,17 +194,17 @@ const deleteOrderFromDB = async (id: string) => {
 };
 
 
-const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
 
+// Update Order
+const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
     // Find the order
-    const order = await Order.findById(id);
+    const order = await Order.findById(id).populate('products.product');
     if (!order) {
         throw new AppError(httpStatus.NOT_FOUND, 'This Order is not found!');
     }
 
     // Check if status is being updated
     if (payload.status && payload.status !== order.status) {
-
         if (!isValidStatusTransition(order.status, payload.status)) {
             throw new AppError(
                 httpStatus.BAD_REQUEST,
@@ -213,46 +213,64 @@ const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
         }
     }
 
-    // Find the bicycle
-    const bicycle = await Bicycle.isBicycleExists(order.productId.toString());
-    // console.log(bicycle);
+    
+    if (payload.products) {
+        for (const updatedProduct of payload.products) {
+            // Find the corresponding product in the order
+            const existingProduct = order.products.find(
+                (p) => p.product._id.toString() === updatedProduct.product.toString()
+            );
 
-    if (!bicycle) {
-        throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
+            if (!existingProduct) {
+                throw new AppError(httpStatus.NOT_FOUND, 'Product not found in the order!');
+            }
+
+            // Find the bicycle in the database
+            const bicycle = await Bicycle.isBicycleExists(updatedProduct.product.toString());
+            if (!bicycle) {
+                throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
+            }
+
+            // Check if the requested quantity is available in stock
+            const quantityDifference = updatedProduct.quantity - existingProduct.quantity;
+            if (quantityDifference > 0 && bicycle.quantity < quantityDifference) {
+                throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient stock for this bicycle!');
+            }
+
+            // Update the bicycle stock quantity
+            await Bicycle.findByIdAndUpdate(
+                bicycle.id, 
+                { $inc: { quantity: -quantityDifference } },
+                { new: true }
+            );
+
+            // Update the product quantity in the order
+            existingProduct.quantity = updatedProduct.quantity;
+        }
     }
 
-    // Check if the requested quantity is available in stock
-    if (payload.quantity && payload.quantity > bicycle.quantity + order.quantity) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Insufficient stock for this bicycle!');
-    }
-
-    // Calculate the difference between new quantity and old quantity
-    const quantityDifference = payload.quantity ? payload.quantity - order.quantity : 0;
-
-
-    if (quantityDifference !== 0) {
-        await Bicycle.findByIdAndUpdate(
-            bicycle.id,
-            { $inc: { quantity: -quantityDifference } },
-            { new: true }
-        );
-    }
-
-    // Calculate totalPrice if quantity is updated
-    if (payload.quantity) {
-        payload.totalPrice = bicycle.price * payload.quantity;
+    // Recalculate the total price of the order
+    if (payload.products) {
+        let totalPrice = 0;
+        for (const product of order.products) {
+            const bicycle = await Bicycle.isBicycleExists(product.product.toString());
+            if (!bicycle) {
+                throw new AppError(httpStatus.NOT_FOUND, 'Bicycle not found!');
+            }
+            totalPrice += bicycle.price * product.quantity;
+        }
+        payload.totalPrice = totalPrice;
     }
 
     // Update the order
     const result = await Order.findOneAndUpdate(
         { _id: id },
-        payload,
+        { ...payload, products: order.products }, 
         { new: true }
     );
 
     return result;
 };
-
 
 
 export const OrderService = {

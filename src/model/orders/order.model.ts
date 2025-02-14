@@ -24,13 +24,9 @@ const orderSchema = new Schema<TOrder>({
             },
             _id: false
         },
-        // { _id: false }
+   
     ],
-    // totalQuantity: {
-    //     type: Number,
-    //     required: true,
-    //     min: [1, "Quantity must be at least 1"],
-    // },
+    
 
     totalPrice: {
         type: Number,
@@ -50,16 +46,6 @@ const orderSchema = new Schema<TOrder>({
         method: String,
         date_time: String,
     },
-    // status: {
-    //     type: String,
-    //     enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
-    //     default: 'Pending',
-    // },
-    // paymentStatus: {
-    //     type: String,
-    //     enum: ['Unpaid', 'Paid'],
-    //     default: 'Unpaid',
-    // },
 },
     {
         timestamps: true,
