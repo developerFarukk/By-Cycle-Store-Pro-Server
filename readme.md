@@ -61,8 +61,6 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
     }
 
 
-
-
 - **Get All Bicycles API**  
   - **Endpoint**: `/api/bicycle`  
   - **Method**: `GET`  

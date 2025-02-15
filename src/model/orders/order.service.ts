@@ -185,7 +185,7 @@ const getMeOrderFromDB = async (query: Record<string, unknown>, userEmail: strin
             populate: {
                 path: 'Bicycle',
             },
-        }),
+        })
 
     const filteredOrders = orders.filter(order => order.user !== null);
 

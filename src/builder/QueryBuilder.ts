@@ -31,7 +31,7 @@ class QueryBuilder<T> {
 
     // Filter functionality (excludes deleted items by default)
     filter() {
-        const queryObj = { ...this.query }; // copy the query object
+        const queryObj = { ...this.query }; 
 
         // Exclude fields that are not part of the document schema
         const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
@@ -80,7 +80,7 @@ class QueryBuilder<T> {
         const totalQueries = this.modelQuery.getFilter();
         const total = await this.modelQuery.model.countDocuments({
             ...totalQueries,
-            isDeleted: { $ne: true }, // Exclude deleted items
+            isDeleted: { $ne: true },
         });
         const page = Number(this?.query?.page) || 1;
         const limit = Number(this?.query?.limit) || 6;
