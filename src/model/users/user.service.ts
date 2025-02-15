@@ -138,13 +138,45 @@ const deleteUserFromDB = async (id: string) => {
 // Password Change Function
 
 const userPasswordChangeIntoDB = async (
-userEmail:string,
-payload: { oldPassword: string; newPassword: string }
+    userEmail: string,
+    payload: { oldPassword: string; newPassword: string }
 ) => {
-    console.log(userEmail, payload);
 
-    return null;
+    const { oldPassword, newPassword } = payload;
+
+    console.log(newPassword);
+
+    // Find the user by email and select the password field
+    const user = await User.findOne({ email: userEmail }).select('+password');
+
+    console.log(user?.password);
+
+
+    // If user not found, throw an error
+    if (!user) {
+        throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+    }
+
+    // Check if the user is blocked or deleted
+    if (user.status === 'blocked') {
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
+    }
+
+    if (user.isDeleted) {
+        throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+    }
+
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+
+
+    if (!isPasswordMatch) {
+        throw new AppError(httpStatus.UNAUTHORIZED, 'Old password is incorrect!');
+    }
+
+    return user;
 };
+
+
 
 // const passwordChangFromDB = async (
 //     userEmail: string,
