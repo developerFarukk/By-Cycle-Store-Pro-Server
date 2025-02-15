@@ -99,7 +99,7 @@ const getAllUserFromDB = async (query: Record<string, unknown>) => {
 
 // Get Me user
 const getMeUserFromDB = async (userEmail: string) => {
-    
+
     const user = await User.findOne({ email: userEmail })
 
     return user
@@ -135,6 +135,66 @@ const deleteUserFromDB = async (id: string) => {
 };
 
 
+// Password Change Function
+
+const userPasswordChangeIntoDB = async (
+userEmail:string,
+payload: { oldPassword: string; newPassword: string }
+) => {
+    console.log(userEmail, payload);
+
+    return null;
+};
+
+// const passwordChangFromDB = async (
+//     userEmail: string,
+//     payload: { oldPassword: string; newPassword: string }
+// ) => {
+
+//     console.log(userEmail, payload);
+
+
+//     // // Destructure the payload
+//     // const { oldPassword, newPassword } = payload;
+
+//     // // Find the user by email and select the password field
+//     // const user = await User.findOne({ email: userEmail }).select('+password');
+
+//     // // If user not found, throw an error
+//     // if (!user) {
+//     //     throw new AppError(httpStatus.NOT_FOUND, 'User not found!');
+//     // }
+
+//     // // Check if the user is blocked or deleted
+//     // if (user.status === 'blocked') {
+//     //     throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked!');
+//     // }
+
+//     // if (user.isDeleted) {
+//     //     throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted!');
+//     // }
+
+//     // // Compare the old password with the hashed password in the database
+//     // const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+
+//     // // If old password does not match, throw an error
+//     // if (!isPasswordMatch) {
+//     //     throw new AppError(httpStatus.UNAUTHORIZED, 'Old password is incorrect!');
+//     // }
+
+//     // // Hash the new password
+//     // const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+//     // // Update the user's password
+//     // user.password = hashedNewPassword;
+//     // await user.save();
+
+//     // Return the updated user object (optional)
+//     // return user;
+//     return null;
+// };
+
+
 
 export const UserService = {
     userRegisterDB,
@@ -142,5 +202,7 @@ export const UserService = {
     getAllUserFromDB,
     updateUserIntoDB,
     deleteUserFromDB,
-    getMeUserFromDB
+    getMeUserFromDB,
+    // passwordChangFromDB
+    userPasswordChangeIntoDB
 }

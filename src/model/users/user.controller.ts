@@ -21,6 +21,7 @@ const registerUser = catchAsync(async (req, res) => {
 
 // user Login 
 const loginUser = catchAsync(async (req, res) => {
+
     const result = await UserService.loginUserWithDB(req.body);
 
     sendResponse(res, {
@@ -95,11 +96,52 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 
+// Password Changes User
+const userPasswordChange = catchAsync(async (req, res) => {
+
+    const userEmail = req.user?.userEmail;
+    
+    const result = await UserService.userPasswordChangeIntoDB(userEmail, req.body );
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'User password changes succesfully',
+        data: result,
+    });
+});
+
+
+// const changePasswordUser = catchAsync(async (req, res) => {
+//     // Get the logged-in user's email from the request object
+//     const userEmail = req.user?.userEmail;
+
+//     console.log(userEmail);
+
+
+//     // Log the request body for debugging
+//     console.log(req.body);
+
+//     // Call the service to change the password
+//     const result = await UserService.passwordChangFromDB(userEmail, req.body);
+
+//     // Send a success response
+//     sendResponse(res, {
+//         statusCode: httpStatus.OK,
+//         success: true,
+//         message: 'Password changed successfully',
+//         data: result
+//     });
+// });
+
+
 export const UserControllers = {
     registerUser,
     loginUser,
     getAlluser,
     updateUser,
     deleteUser,
-    getMeuser
+    getMeuser,
+    // changePasswordUser
+    userPasswordChange
 }

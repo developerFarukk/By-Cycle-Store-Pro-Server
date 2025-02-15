@@ -30,10 +30,10 @@ router.get(
     UserControllers.getAlluser,
 );
 
-// get All user route
+// get Me user route
 router.get(
     '/me',
-    auth( USER_ROLE.customer),
+    auth(USER_ROLE.customer),
     UserControllers.getMeuser,
 );
 
@@ -51,6 +51,15 @@ router.delete(
     '/:id',
     auth(USER_ROLE.admin),
     UserControllers.deleteUser,
+);
+
+
+// Password cgange user route
+router.patch(
+    '/passwordchange/:userEmail',
+    auth(USER_ROLE.customer, USER_ROLE.admin),
+    validateRequest(UserValidation.passwordChangeUserValidationSchema),
+    UserControllers.userPasswordChange,
 );
 
 export const UserRoutes = router;
