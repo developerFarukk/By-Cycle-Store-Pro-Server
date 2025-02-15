@@ -33,7 +33,7 @@ router.get(
 // get Me user route
 router.get(
     '/me',
-    auth(USER_ROLE.customer),
+    auth(USER_ROLE.customer, USER_ROLE.admin),
     UserControllers.getMeuser,
 );
 
