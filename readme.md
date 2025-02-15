@@ -1,12 +1,12 @@
 
-# 🚴 Bicycle Store API
+# 🚴 RideNest
 
 ## Objective
 A robust **Express** application built with **TypeScript** and **MongoDB (Mongoose)** to manage a Bicycle Store. The API enables CRUD operations on products (bicycles), manages customer orders, and ensures data integrity using schema validation.
 
 ---
 
-- **Website Live Link**: <a href="https://bi-cycle-store-api.vercel.app" target="_blank" rel="noopener noreferrer">Bicycle Store</a>
+- **Website Live Link**: <a href="https://bi-cycle-store-api.vercel.app" target="_blank" rel="noopener noreferrer">RideNest</a>
   **VIDIO Review Link**: <a href="https://drive.google.com/file/d/1rkxy8kzlnTDsp6-tHLp9seautfS-IrOk/view?usp=sharing" target="_blank" rel="noopener noreferrer">Video Presentation</a>
 
 ## Features ✨
@@ -16,6 +16,20 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 - **Robust Validation**: Includes comprehensive data validation and error handling for all endpoints.
 - **Search Functionality**: Query bicycles based on name, brand, or type.
 - **Real-Time Stock Updates**: Automatically adjusts stock levels upon successful orders.
+
+## Authentication ✨
+- **User**: Admin and Customer role base user login
+- **Managmet**: Store, Order, Profile, Changed Password, All user, Creat product
+
+---
+
+
+## Admin Credentials ✨
+ ```json
+    {
+        "email": "farukk7920@gmail.com",
+        "password": "1234",
+    } 
 
 ---
 
@@ -32,7 +46,7 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ### Bicycle APIs
 - **Create Bicycle API**  
-  - **Endpoint**: `/api/products`  
+  - **Endpoint**: `/api/bicycle`  
   - **Method**: `POST` 
   - **Request Body**: 
     ```json
@@ -47,8 +61,10 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
     }
 
 
+
+
 - **Get All Bicycles API**  
-  - **Endpoint**: `/api/products`  
+  - **Endpoint**: `/api/bicycle`  
   - **Method**: `GET`  
 
 - **Get Single Bicycle API**  
@@ -56,8 +72,8 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
   - **Method**: `GET`  
 
 - **Update Bicycle API**  
-  - **Endpoint**: `/api/products/:productId`  
-  - **Method**: `PUT` 
+  - **Endpoint**: `/api/bicycle/:bicycleId`  
+  - **Method**: `PATCH` 
   - **Request Body**: 
     ```json
     { 
@@ -66,7 +82,7 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
     } 
 
 - **Delete Bicycle API**  
-  - **Endpoint**: `/api/products/:productId`  
+  - **Endpoint**: `/api/bicycle/:bicycleId`  
   - **Method**: `DELETE`  
 
 ### Order APIs
@@ -98,7 +114,7 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 ### Installation Steps
 1. **Clone the Repository**  
    ```bash
-   git clone https://github.com/developerFarukk/Bi-Cycle-Store.git
+   git clone https://github.com/developerFarukk/By-Cycle-Store-Pro-Server.git
    cd bicycle-store-api
 
 2. **Install Dependencies**  
