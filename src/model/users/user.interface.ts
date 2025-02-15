@@ -12,6 +12,7 @@ export interface TUser {
     mobile: string;
     address: string;
     isDeleted: boolean;
+    passwordChangedAt?: Date;
 };
 
 
@@ -19,13 +20,18 @@ export interface UserModel extends Model<TUser> {
 
     isUserExistsByCustomId(email: string): Promise<TUser>;
 
-    getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted'| 'mobile'| 'address'>>;
+    getPublicUserData(userId: string): Promise<Pick<TUser, 'id' | 'name' | 'email' | 'role' | 'status' | 'isDeleted' | 'mobile' | 'address'>>;
 
     //instance methods for checking if passwords are matched
     isPasswordMatched(
         plainTextPassword: string,
         hashedPassword: string,
     ): Promise<boolean>;
+
+    passwordChangedAt: {
+        type: Date,
+        default: null,
+    },
 }
 
 

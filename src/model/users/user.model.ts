@@ -28,7 +28,7 @@ const userSchema = new Schema<TUser>(
         password: {
             type: String,
             required: [true, 'Password id is required'],
-            maxlength: [4, 'User password can not be more than 4 characters'],
+            // maxlength: [4, 'User password can not be more than 4 characters'],
             select: false
         },
         role: {
@@ -58,6 +58,10 @@ const userSchema = new Schema<TUser>(
             maxlength: [11, 'User mobil number can not be more than 11 characters'],
             minlength: 11
         },
+        passwordChangedAt: {
+            type: Date,
+            default: null,
+        },
     },
     {
         timestamps: true,
@@ -68,14 +72,14 @@ const userSchema = new Schema<TUser>(
 
 userSchema.pre('save', async function (next) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const user = this; // doc
-    // hashing password and save into DB
-    user.password = await bcrypt.hash(
-        user.password,
-        Number(config.bcrypt_salt_rounds),
-    );
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+        user.passwordChangedAt = new Date();
+    }
     next();
 });
+
 
 // set '' after saving password
 userSchema.post('save', function (doc, next) {
@@ -102,6 +106,8 @@ userSchema.statics.isPasswordMatched = async function (
 ) {
     return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
+
+
 
 
 userSchema.pre('find', function (next) {
