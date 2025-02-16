@@ -14,7 +14,7 @@ app.use(express.json())
 app.use(cookieParser());
 // app.use(cors({ origin: ['http://localhost:5001'] }));
 // app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
-app.use(cors({ origin: ['https://ridenest.vercel.app'], credentials: true }));
+app.use(cors({ origin: ['https://ridenest.vercel.app', 'http://localhost:5173'], credentials: true }));
 
 
 // Router File Linkup
