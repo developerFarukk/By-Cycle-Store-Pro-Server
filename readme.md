@@ -6,8 +6,9 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 
 ---
 
-- **Website Live Link**: <a href="https://bi-cycle-store-api.vercel.app" target="_blank" rel="noopener noreferrer">RideNest</a>
-  **VIDIO Review Link**: <a href="https://drive.google.com/file/d/1rkxy8kzlnTDsp6-tHLp9seautfS-IrOk/view?usp=sharing" target="_blank" rel="noopener noreferrer">Video Presentation</a>
+- **Website Live Link**: <a href="https://ridenest.vercel.app" target="_blank" rel="noopener noreferrer">RideNest</a>
+- **GitHub Client Repo**: <a href="https://github.com/developerFarukk/Bi-Cycle-Store-Pro-Client" target="_blank" rel="noopener noreferrer">RideNest Client</a>
+  **VIDIO Review Link**: <a href="https://drive.google.com/file/d/1IsGVsPrFx5H8lbmnGJ4HgKfblrYOH4hI/view?usp=sharing" target="_blank" rel="noopener noreferrer">Video Presentation</a>
 
 ## Features ✨
 - **Bicycle Management**: Add, retrieve, update, and delete bicycles with detailed attributes like brand, type, price, stock status, etc.
@@ -24,14 +25,13 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
 ---
 
 
-## Admin Credentials ✨
+### Admin Credentials ✨
  ```json
     {
-        "email": "farukk7920@gmail.com",
+        "email": "ridenest@gmail.com",
         "password": "1234",
     } 
 
----
 
 ## Tech Stack 🛠️
 - **Backend**: Node.js, Express.js, TypeScript
@@ -91,7 +91,7 @@ A robust **Express** application built with **TypeScript** and **MongoDB (Mongoo
     ```json
     {
         "email": "customerr@example.com",
-        "product": "648a45e5f0123c45678d9012",
+        "product": "648a45e5f0123d45678d9012",
         "quantity": 2,
         "totalPrice": 600
     }   
